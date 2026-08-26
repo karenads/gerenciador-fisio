@@ -1,8 +1,6 @@
 package com.example.gerenciadorfisio.controllers;
 import com.example.gerenciadorfisio.entities.Tratamento;
-import com.example.gerenciadorfisio.entities.tratamento;
 import com.example.gerenciadorfisio.repository.TratamentoRepository;
-import com.example.gerenciadorfisio.repository.tratamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

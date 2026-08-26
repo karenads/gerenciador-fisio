@@ -27,4 +27,6 @@ public class Sessao {
 
     private String observacoes;
 
+    private Boolean realizada;
+
 }
