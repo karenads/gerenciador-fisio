@@ -1,4 +1,7 @@
 'use client'
+
+import Link from "next/link";
+
 export default function Home() {
   return (
     <>
@@ -14,9 +17,9 @@ export default function Home() {
             <a href="#historia">Nossa História</a>
             <a href="#funcionalidades">Funcionalidades</a>
 
-            <a href="/login" className="btn-login">
-              Login
-            </a>
+        
+            <Link href="/login" className="btn-login">Entrar</Link>
+            
           </div>
         </nav>
       </header>
