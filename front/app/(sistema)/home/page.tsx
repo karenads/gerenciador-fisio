@@ -23,7 +23,7 @@ export default function Home() {
         </div>
 
         {/* Cards principais */}
-        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-6 md:grid-cols-3">
 
           {/* Pacientes */}
           <Link
@@ -88,28 +88,6 @@ export default function Home() {
 
             <p className="mt-5 text-sm font-semibold text-purple-700">
               Acessar sessões →
-            </p>
-          </Link>
-
-          {/* Usuários */}
-          <Link
-            href="/home/usuarios"
-            className="group rounded-2xl border border-purple-100 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-purple-300 hover:shadow-lg"
-          >
-            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-100 text-xl font-bold text-purple-700">
-              U
-            </div>
-
-            <h2 className="text-xl font-bold text-gray-800">
-              Usuários
-            </h2>
-
-            <p className="mt-2 text-sm leading-6 text-gray-500">
-              Gerencie os profissionais e usuários cadastrados.
-            </p>
-
-            <p className="mt-5 text-sm font-semibold text-purple-700">
-              Acessar usuários →
             </p>
           </Link>
 
