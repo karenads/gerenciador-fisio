@@ -1,7 +1,7 @@
 import Link from "next/link";
-import PacienteForm from "../components/PacienteForm";
+import PacienteForm from "../../components/PacienteForm";
 
-export default function NovoPaciente() {
+export default function EditarPaciente() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-100 px-6 py-10 md:px-10">
       <div className="mx-auto w-full max-w-4xl">
@@ -20,20 +20,19 @@ export default function NovoPaciente() {
           </p>
 
           <h1 className="mt-2 text-3xl font-bold text-gray-800 md:text-4xl">
-            Novo paciente
+            Editar paciente
           </h1>
 
           <p className="mt-2 text-gray-600">
-            Preencha os dados abaixo para cadastrar um novo paciente.
+            Atualize os dados do paciente.
           </p>
         </div>
 
         {/* Formulário */}
         <div className="rounded-2xl border border-purple-100 bg-white p-6 shadow-sm md:p-8">
-
           <PacienteForm />
-
         </div>
+
       </div>
     </div>
   );
