@@ -1,12 +1,56 @@
-import Link from "next/link";
+'use client'
+
+import { Tratamento } from "@/app/types/tratamento";
+import axios from "@/node_modules/axios/index";
+import Link from "@/node_modules/next/link";
+import { useEffect, useState } from "react";
 
 export default function Tratamentos() {
+
+  const [tratamentos, setTratamentos] = useState<Tratamento[]>([]);
+
+  useEffect(() => {
+    carregarDados();
+  }, []);
+
+  const carregarDados = async () => {
+    try {
+
+      // COLOCAR A URL DO GET DO SWAGGER AQUI
+      const url = "";
+
+      // Enquanto não tivermos o endpoint,
+      // mantém a lista vazia e não faz a requisição.
+      if (!url) {
+        setTratamentos([]);
+        return;
+      }
+
+      const token = localStorage.getItem("token");
+
+      const dados = await axios.get<Tratamento[]>(
+        url,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setTratamentos(dados.data);
+
+    } catch (error) {
+      alert("Erro ao carregar tratamentos!");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-100 px-6 py-10 md:px-10">
       <div className="mx-auto w-full max-w-7xl">
 
         {/* Cabeçalho */}
         <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+
           <div>
             <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-purple-600">
               FisioCare
@@ -17,7 +61,7 @@ export default function Tratamentos() {
             </h1>
 
             <p className="mt-2 text-gray-600">
-              Acompanhe e organize os tratamentos dos pacientes.
+              Acompanhe e organize os tratamentos cadastrados.
             </p>
           </div>
 
@@ -27,6 +71,7 @@ export default function Tratamentos() {
           >
             + Novo tratamento
           </Link>
+
         </div>
 
         {/* Lista */}
@@ -39,12 +84,14 @@ export default function Tratamentos() {
           </div>
 
           <div className="overflow-x-auto">
+
             <table className="w-full text-left">
 
               <thead>
                 <tr className="border-b border-gray-100 text-sm text-gray-500">
+
                   <th className="px-6 py-4 font-semibold">
-                    Paciente
+                    Código
                   </th>
 
                   <th className="px-6 py-4 font-semibold">
@@ -66,98 +113,109 @@ export default function Tratamentos() {
                   <th className="px-6 py-4 font-semibold">
                     Ações
                   </th>
+
                 </tr>
               </thead>
 
               <tbody>
 
-                {/* Exemplo 1 */}
-                <tr className="border-b border-gray-100 transition hover:bg-purple-50/50">
+                {tratamentos.map((tratamento) => (
 
-                  <td className="px-6 py-5">
-                    <div>
-                      <p className="font-semibold text-gray-800">
-                        Paciente exemplo
-                      </p>
+                  <tr
+                    key={tratamento.id}
+                    className="border-b border-gray-100 transition hover:bg-purple-50/50"
+                  >
 
-                      <p className="text-sm text-gray-500">
-                        Atendimento fisioterapêutico
-                      </p>
-                    </div>
-                  </td>
+                    {/* Código */}
+                    <td className="px-6 py-5 text-gray-600">
+                      {tratamento.id}
+                    </td>
 
-                  <td className="px-6 py-5 text-gray-600">
-                    Recuperação de joelho
-                  </td>
+                    {/* Nome e descrição */}
+                    <td className="px-6 py-5">
+                      <div>
 
-                  <td className="px-6 py-5 text-gray-600">
-                    01/09/2026 até 30/10/2026
-                  </td>
+                        <p className="font-semibold text-gray-800">
+                          {tratamento.nome}
+                        </p>
 
-                  <td className="px-6 py-5 text-gray-600">
-                    5 de 10
-                  </td>
+                        <p className="text-sm text-gray-500">
+                          {tratamento.descricao}
+                        </p>
 
-                  <td className="px-6 py-5">
-                    <span className="rounded-full bg-purple-100 px-3 py-1 text-sm font-semibold text-purple-700">
-                      Em andamento
-                    </span>
-                  </td>
+                      </div>
+                    </td>
 
-                  <td className="px-6 py-5">
-                    <button className="font-semibold text-purple-700 transition hover:text-purple-900">
-                      Visualizar
-                    </button>
-                  </td>
-                </tr>
+                    {/* Período */}
+                    <td className="px-6 py-5 text-gray-600">
 
-                {/* Exemplo 2 */}
-                <tr className="transition hover:bg-purple-50/50">
+                      <div>
+                        <p>
+                          Início: {tratamento.dataInicio}
+                        </p>
 
-                  <td className="px-6 py-5">
-                    <div>
-                      <p className="font-semibold text-gray-800">
-                        Outro paciente
-                      </p>
+                        <p className="text-sm text-gray-500">
+                          Final: {tratamento.dataFinal}
+                        </p>
+                      </div>
 
-                      <p className="text-sm text-gray-500">
-                        Atendimento pós-operatório
-                      </p>
-                    </div>
-                  </td>
+                    </td>
 
-                  <td className="px-6 py-5 text-gray-600">
-                    Reabilitação de ombro
-                  </td>
+                    {/* Sessões */}
+                    <td className="px-6 py-5 text-gray-600">
+                      {tratamento.sessoesRealizadas} de{" "}
+                      {tratamento.totalSessoes}
+                    </td>
 
-                  <td className="px-6 py-5 text-gray-600">
-                    15/08/2026 até 15/09/2026
-                  </td>
+                    {/* Status */}
+                    <td className="px-6 py-5">
 
-                  <td className="px-6 py-5 text-gray-600">
-                    8 de 8
-                  </td>
+                      <span className="rounded-full bg-purple-100 px-3 py-1 text-sm font-semibold text-purple-700">
+                        {tratamento.status}
+                      </span>
 
-                  <td className="px-6 py-5">
-                    <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
-                      Concluído
-                    </span>
-                  </td>
+                    </td>
 
-                  <td className="px-6 py-5">
-                    <button className="font-semibold text-purple-700 transition hover:text-purple-900">
-                      Visualizar
-                    </button>
-                  </td>
-                </tr>
+                    {/* Ações */}
+                    <td className="px-6 py-5">
+
+                      <Link
+                        href={`/home/tratamentos/${tratamento.id}/editar`}
+                        className="font-semibold text-purple-700 transition hover:text-purple-900"
+                      >
+                        Editar
+                      </Link>
+
+                    </td>
+
+                  </tr>
+
+                ))}
+
+                {/* Caso não existam tratamentos */}
+                {tratamentos.length === 0 && (
+
+                  <tr>
+                    <td
+                      colSpan={6}
+                      className="px-6 py-12 text-center text-gray-500"
+                    >
+                      Nenhum tratamento encontrado!
+                    </td>
+                  </tr>
+
+                )}
 
               </tbody>
+
             </table>
+
           </div>
         </div>
 
         {/* Informação complementar */}
         <div className="mt-8 rounded-2xl border border-purple-100 bg-white p-6 shadow-sm">
+
           <p className="text-sm font-semibold uppercase tracking-wide text-purple-600">
             Evolução do paciente
           </p>
@@ -170,6 +228,7 @@ export default function Tratamentos() {
             Organize o período do tratamento, acompanhe o número de sessões
             realizadas e mantenha as informações clínicas centralizadas.
           </p>
+
         </div>
 
       </div>

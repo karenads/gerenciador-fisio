@@ -1,17 +1,17 @@
 "use client";
 
 import Link from "@/node_modules/next/link";
-import PacienteForm from "@/app/(sistema)/home/pacientes/components/PacienteForm";
+import SessaoForm from "@/app/(sistema)/home/sessoes/components/SessaoForm";
 import { useParams, useRouter } from "@/node_modules/next/navigation";
 import { useEffect, useState } from "react";
-import { Paciente } from "@/app/types/paciente";
+import { Sessao } from "@/app/types/sessao";
 import axios from "@/node_modules/axios/index";
 
-export default function EditarPaciente() {
+export default function EditarSessao() {
   const parametro = useParams();
   const codigo = Number(parametro.codigo);
 
-  const [paciente, setPaciente] = useState<Paciente | null>(null);
+  const [sessao, setSessao] = useState<Sessao | null>(null);
 
   const router = useRouter();
 
@@ -22,18 +22,18 @@ export default function EditarPaciente() {
   const buscarDados = async () => {
 
     // COLOCAR A URL DO GET POR CÓDIGO DO SWAGGER AQUI
-    const valorPacienteBack = await axios.get<Paciente>(
+    const valorSessaoBack = await axios.get<Sessao>(
       "" + codigo
     );
 
-    if (valorPacienteBack.status == 200) {
-      setPaciente(valorPacienteBack.data);
+    if (valorSessaoBack.status == 200) {
+      setSessao(valorSessaoBack.data);
     } else {
-      router.push("/home/pacientes");
+      router.push("/home/sessoes");
     }
   };
 
-  if (!paciente) {
+  if (!sessao) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-100 p-8">
         <p className="text-gray-600">
@@ -49,7 +49,7 @@ export default function EditarPaciente() {
 
         <div className="mb-10">
           <Link
-            href="/home/pacientes"
+            href="/home/sessoes"
             className="inline-flex items-center gap-2 text-sm font-medium text-purple-700 transition hover:text-purple-900"
           >
             <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-purple-200 bg-white transition hover:border-purple-400">
@@ -65,17 +65,17 @@ export default function EditarPaciente() {
             </p>
 
             <h1 className="text-4xl font-black text-gray-800 md:text-5xl">
-              Editar Paciente {codigo}
+              Editar Sessão {codigo}
             </h1>
 
             <p className="mt-3 text-gray-600">
-              Preencha os dados para editar o paciente.
+              Preencha os dados para editar a sessão.
             </p>
           </div>
         </div>
 
         <div>
-          <PacienteForm pacienteExistente={paciente} />
+          <SessaoForm sessaoExistente={sessao} />
         </div>
 
       </div>

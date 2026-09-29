@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import UsuarioForm from "../../components/UsuarioForm";
-import { useParams, useRouter } from "next/navigation";
+import Link from "@/node_modules/next/link";
+import UsuarioForm from "@/app/(sistema)/usuarios/components/UsuarioForm";
+import { useParams, useRouter } from "@/node_modules/next/navigation";
 import { useEffect, useState } from "react";
-import { Usuario } from "../../../../types/usuario";
-import axios from "axios";
+import { Usuario } from "@/app/types/usuario";
+import axios from "@/node_modules/axios/index";
 
 export default function EditarUsuario() {
   const parametro = useParams();

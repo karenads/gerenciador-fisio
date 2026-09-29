@@ -1,6 +1,55 @@
-import Link from "next/link";
+"use client";
+
+import axios from "@/node_modules/axios/index";
+import Link from "@/node_modules/next/link";
+import { useEffect, useState } from "react";
+import { Sessao } from "@/app/types/sessao";
 
 export default function Sessoes() {
+  const [sessoes, setSessoes] = useState<Sessao[]>([]);
+
+  useEffect(() => {
+    carregarDados();
+  }, []);
+
+  const carregarDados = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      // COLOCAR A URL DO GET DE SESSÕES DO SWAGGER AQUI
+      const dados = await axios.get<Sessao[]>(
+        "",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setSessoes(dados.data);
+    } catch (error) {
+      alert("Erro ao carregar dados!");
+    }
+  };
+
+  const handleDeletarSessao = async (sessao: Sessao) => {
+
+    // COLOCAR A URL DO DELETE DO SWAGGER AQUI
+    var dadosRetorno = await axios.delete(
+      ""
+    );
+
+    if (dadosRetorno.status == 200) {
+      alert("Excluído com sucesso!");
+    } else {
+      alert(dadosRetorno.data);
+
+      return;
+    }
+
+    carregarDados();
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-100 px-6 py-10 md:px-10">
       <div className="mx-auto w-full max-w-7xl">
@@ -17,7 +66,7 @@ export default function Sessoes() {
             </h1>
 
             <p className="mt-2 text-gray-600">
-              Organize e acompanhe as sessões de fisioterapia dos pacientes.
+              Organize e acompanhe as sessões de fisioterapia.
             </p>
           </div>
 
@@ -34,7 +83,7 @@ export default function Sessoes() {
 
           <div className="border-b border-purple-100 bg-purple-50 px-6 py-4">
             <h2 className="text-lg font-semibold text-purple-800">
-              Sessões agendadas
+              Sessões cadastradas
             </h2>
           </div>
 
@@ -43,8 +92,9 @@ export default function Sessoes() {
 
               <thead>
                 <tr className="border-b border-gray-100 text-sm text-gray-500">
+
                   <th className="px-6 py-4 font-semibold">
-                    Paciente
+                    Código
                   </th>
 
                   <th className="px-6 py-4 font-semibold">
@@ -66,90 +116,88 @@ export default function Sessoes() {
                   <th className="px-6 py-4 font-semibold">
                     Ações
                   </th>
+
                 </tr>
               </thead>
 
               <tbody>
 
-                {/* Exemplo 1 */}
-                <tr className="border-b border-gray-100 transition hover:bg-purple-50/50">
+                {sessoes.map((sessao) => (
+                  <tr
+                    key={sessao.id}
+                    className="border-b border-gray-100 transition hover:bg-purple-50/50"
+                  >
 
-                  <td className="px-6 py-5">
-                    <div>
-                      <p className="font-semibold text-gray-800">
-                        Paciente exemplo
-                      </p>
+                    {/* Código */}
+                    <td className="px-6 py-5 text-gray-600">
+                      {sessao.id}
+                    </td>
 
-                      <p className="text-sm text-gray-500">
-                        Tratamento de recuperação
-                      </p>
-                    </div>
-                  </td>
+                    {/* Data */}
+                    <td className="px-6 py-5 text-gray-600">
+                      {sessao.data}
+                    </td>
 
-                  <td className="px-6 py-5 text-gray-600">
-                    16/09/2026
-                  </td>
+                    {/* Horário */}
+                    <td className="px-6 py-5 text-gray-600">
+                      {sessao.horario}
+                    </td>
 
-                  <td className="px-6 py-5 text-gray-600">
-                    14:30
-                  </td>
+                    {/* Descrição */}
+                    <td className="px-6 py-5 text-gray-600">
+                      {sessao.descricao}
+                    </td>
 
-                  <td className="px-6 py-5 text-gray-600">
-                    Mobilidade e fortalecimento
-                  </td>
+                    {/* Realizada */}
+                    <td className="px-6 py-5">
 
-                  <td className="px-6 py-5">
-                    <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
-                      Realizada
-                    </span>
-                  </td>
+                      {sessao.realizada ? (
+                        <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
+                          Realizada
+                        </span>
+                      ) : (
+                        <span className="rounded-full bg-yellow-100 px-3 py-1 text-sm font-semibold text-yellow-700">
+                          Pendente
+                        </span>
+                      )}
 
-                  <td className="px-6 py-5">
-                    <button className="font-semibold text-purple-700 transition hover:text-purple-900">
-                      Visualizar
-                    </button>
-                  </td>
-                </tr>
+                    </td>
 
-                {/* Exemplo 2 */}
-                <tr className="transition hover:bg-purple-50/50">
+                    {/* Ações */}
+                    <td className="px-6 py-5">
+                      <div className="flex items-center gap-4">
 
-                  <td className="px-6 py-5">
-                    <div>
-                      <p className="font-semibold text-gray-800">
-                        Outro paciente
-                      </p>
+                        <Link
+                          href={`/home/sessoes/${sessao.id}/editar`}
+                          className="font-semibold text-purple-700 transition hover:text-purple-900"
+                        >
+                          Editar
+                        </Link>
 
-                      <p className="text-sm text-gray-500">
-                        Tratamento pós-operatório
-                      </p>
-                    </div>
-                  </td>
+                        <button
+                          onClick={() => handleDeletarSessao(sessao)}
+                          className="font-medium text-red-600 transition-colors hover:text-red-800"
+                        >
+                          DELETAR
+                        </button>
 
-                  <td className="px-6 py-5 text-gray-600">
-                    18/09/2026
-                  </td>
+                      </div>
+                    </td>
 
-                  <td className="px-6 py-5 text-gray-600">
-                    10:00
-                  </td>
+                  </tr>
+                ))}
 
-                  <td className="px-6 py-5 text-gray-600">
-                    Avaliação e exercícios funcionais
-                  </td>
-
-                  <td className="px-6 py-5">
-                    <span className="rounded-full bg-yellow-100 px-3 py-1 text-sm font-semibold text-yellow-700">
-                      Pendente
-                    </span>
-                  </td>
-
-                  <td className="px-6 py-5">
-                    <button className="font-semibold text-purple-700 transition hover:text-purple-900">
-                      Visualizar
-                    </button>
-                  </td>
-                </tr>
+                {/* Nenhuma sessão */}
+                {sessoes.length === 0 && (
+                  <tr>
+                    <td
+                      colSpan={6}
+                      className="px-6 py-12 text-center text-gray-500"
+                    >
+                      Nenhuma sessão encontrada!
+                    </td>
+                  </tr>
+                )}
 
               </tbody>
             </table>
@@ -167,9 +215,8 @@ export default function Sessoes() {
           </h3>
 
           <p className="mt-2 max-w-3xl text-sm leading-6 text-gray-600">
-            Cada sessão permite acompanhar o progresso do paciente,
-            registrar observações e manter o histórico do tratamento
-            organizado.
+            Cada sessão permite registrar informações e observações,
+            mantendo o histórico dos atendimentos organizado.
           </p>
         </div>
 

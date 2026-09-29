@@ -1,38 +1,71 @@
 'use client'
 
-import { Paciente, PacienteFormProps } from "@/app/types/paciente";
+import { Tratamento, TratamentoFormProps } from "@/app/types/tratamento";
 import axios from "@/node_modules/axios/index";
 import Link from "@/node_modules/next/link";
 import { useRouter } from "@/node_modules/next/navigation";
 import { useState } from "react";
 
-export default function PacienteForm({pacienteExistente}: PacienteFormProps) {
+export default function TratamentoForm({
+  tratamentoExistente
+}: TratamentoFormProps) {
+
   const router = useRouter();
 
-  // Cria o estado do paciente.
-  // Se estiver editando, utiliza o paciente que já existe.
-  // Se estiver cadastrando, cria um paciente vazio.
-  const [paciente, setPaciente] = useState<Paciente>(
-    pacienteExistente ||
-    new Paciente(null, "", "", "", "", "", "", "")
+  // Se estiver editando, utiliza o tratamento existente.
+  // Se estiver cadastrando, cria um tratamento vazio.
+  const [tratamento, setTratamento] = useState<Tratamento>(
+    tratamentoExistente ||
+    new Tratamento(
+      null,
+      "",
+      "",
+      "",
+      "",
+      0,
+      0,
+      ""
+    )
   );
 
-  // Atualiza o campo que foi alterado no formulário
+  // Atualiza os campos de texto e data
   const handlerChange = (
-    campo: "nome" | "cpf" | "telefone" | "email" | "dataNascimento" | "endereco" | "observacoes",
+    campo: "nome" | "descricao" | "dataInicio" | "dataFinal" | "status",
     valor: string
   ) => {
-    setPaciente(
+    setTratamento(
       valorAnterior =>
-        new Paciente(
+        new Tratamento(
           valorAnterior.id,
           campo === "nome" ? valor : valorAnterior.nome,
-          campo === "cpf" ? valor : valorAnterior.cpf,
-          campo === "telefone" ? valor : valorAnterior.telefone,
-          campo === "email" ? valor : valorAnterior.email,
-          campo === "dataNascimento" ? valor : valorAnterior.dataNascimento,
-          campo === "endereco" ? valor : valorAnterior.endereco,
-          campo === "observacoes" ? valor : valorAnterior.observacoes
+          campo === "descricao" ? valor : valorAnterior.descricao,
+          campo === "dataInicio" ? valor : valorAnterior.dataInicio,
+          campo === "dataFinal" ? valor : valorAnterior.dataFinal,
+          valorAnterior.totalSessoes,
+          valorAnterior.sessoesRealizadas,
+          campo === "status" ? valor : valorAnterior.status
+        )
+    );
+  };
+
+  // Atualiza os campos numéricos
+  const handlerChangeNumero = (
+    campo: "totalSessoes" | "sessoesRealizadas",
+    valor: number
+  ) => {
+    setTratamento(
+      valorAnterior =>
+        new Tratamento(
+          valorAnterior.id,
+          valorAnterior.nome,
+          valorAnterior.descricao,
+          valorAnterior.dataInicio,
+          valorAnterior.dataFinal,
+          campo === "totalSessoes" ? valor : valorAnterior.totalSessoes,
+          campo === "sessoesRealizadas"
+            ? valor
+            : valorAnterior.sessoesRealizadas,
+          valorAnterior.status
         )
     );
   };
@@ -40,19 +73,25 @@ export default function PacienteForm({pacienteExistente}: PacienteFormProps) {
   const handlerSalvar = async (formData: FormData) => {
 
     // Editar
-    if (pacienteExistente) {
+    if (tratamentoExistente) {
 
       // COLOCAR A URL DO PUT DO SWAGGER AQUI
-      var dadosRetorno = await axios.put<number>(
-        "",
-        paciente
+      const url = "";
+
+      if (!url) {
+        alert("Endpoint de edição ainda não configurado.");
+        return;
+      }
+
+      const dadosRetorno = await axios.put<number>(
+        url,
+        tratamento
       );
 
       if (dadosRetorno.status == 200) {
-        alert("Paciente foi salvo com sucesso!");
+        alert("Tratamento foi salvo com sucesso!");
       } else {
         alert(dadosRetorno.data);
-
         return;
       }
 
@@ -60,21 +99,27 @@ export default function PacienteForm({pacienteExistente}: PacienteFormProps) {
     } else {
 
       // COLOCAR A URL DO POST DO SWAGGER AQUI
-      var dadosRetorno = await axios.post<number>(
-        "",
-        paciente
+      const url = "";
+
+      if (!url) {
+        alert("Endpoint de cadastro ainda não configurado.");
+        return;
+      }
+
+      const dadosRetorno = await axios.post<number>(
+        url,
+        tratamento
       );
 
       if (dadosRetorno.status == 200) {
-        alert("Paciente foi salvo com sucesso!");
+        alert("Tratamento foi salvo com sucesso!");
       } else {
         alert(dadosRetorno.data);
-
         return;
       }
     }
 
-    router.push("/pacientes");
+    router.push("/home/tratamentos");
   };
 
   return (
@@ -85,119 +130,118 @@ export default function PacienteForm({pacienteExistente}: PacienteFormProps) {
         {/* Nome */}
         <div className="space-y-2">
           <label className="block text-sm font-semibold text-gray-700">
-            Nome completo
+            Nome do tratamento
           </label>
 
           <input
             name="nome"
-            value={paciente.nome}
+            value={tratamento.nome}
             onChange={(e) => handlerChange("nome", e.target.value)}
             required
             type="text"
-            placeholder="Digite o nome do paciente"
+            placeholder="Digite o nome do tratamento"
             className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
           />
         </div>
 
-        {/* CPF */}
+        {/* Status */}
         <div className="space-y-2">
           <label className="block text-sm font-semibold text-gray-700">
-            CPF
+            Status
           </label>
 
           <input
-            name="cpf"
-            value={paciente.cpf}
-            onChange={(e) => handlerChange("cpf", e.target.value)}
-            required
+            name="status"
+            value={tratamento.status}
+            onChange={(e) => handlerChange("status", e.target.value)}
             type="text"
-            placeholder="000.000.000-00"
+            placeholder="Digite o status"
             className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
           />
         </div>
 
-        {/* Telefone */}
+        {/* Data de início */}
         <div className="space-y-2">
           <label className="block text-sm font-semibold text-gray-700">
-            Telefone
+            Data de início
           </label>
 
           <input
-            name="telefone"
-            value={paciente.telefone}
-            onChange={(e) => handlerChange("telefone", e.target.value)}
+            name="dataInicio"
+            value={tratamento.dataInicio}
+            onChange={(e) => handlerChange("dataInicio", e.target.value)}
             required
-            type="text"
-            placeholder="(00) 00000-0000"
+            type="datetime-local"
             className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
           />
         </div>
 
-        {/* E-mail */}
+        {/* Data final */}
         <div className="space-y-2">
           <label className="block text-sm font-semibold text-gray-700">
-            E-mail
+            Data final
           </label>
 
           <input
-            name="email"
-            value={paciente.email}
-            onChange={(e) => handlerChange("email", e.target.value)}
-            required
-            type="email"
-            placeholder="paciente@email.com"
+            name="dataFinal"
+            value={tratamento.dataFinal}
+            onChange={(e) => handlerChange("dataFinal", e.target.value)}
+            type="datetime-local"
             className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
           />
         </div>
 
-        {/* Data de nascimento */}
+        {/* Total de sessões */}
         <div className="space-y-2">
           <label className="block text-sm font-semibold text-gray-700">
-            Data de nascimento
+            Total de sessões
           </label>
 
           <input
-            name="dataNascimento"
-            value={paciente.dataNascimento}
+            name="totalSessoes"
+            value={tratamento.totalSessoes}
             onChange={(e) =>
-              handlerChange("dataNascimento", e.target.value)
+              handlerChangeNumero("totalSessoes", Number(e.target.value))
             }
-            required
-            type="date"
+            min={0}
+            type="number"
             className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
           />
         </div>
 
-        {/* Endereço */}
+        {/* Sessões realizadas */}
         <div className="space-y-2">
           <label className="block text-sm font-semibold text-gray-700">
-            Endereço
+            Sessões realizadas
           </label>
 
           <input
-            name="endereco"
-            value={paciente.endereco}
-            onChange={(e) => handlerChange("endereco", e.target.value)}
-            type="text"
-            placeholder="Digite o endereço do paciente"
+            name="sessoesRealizadas"
+            value={tratamento.sessoesRealizadas}
+            onChange={(e) =>
+              handlerChangeNumero(
+                "sessoesRealizadas",
+                Number(e.target.value)
+              )
+            }
+            min={0}
+            type="number"
             className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
           />
         </div>
 
-        {/* Observações */}
+        {/* Descrição */}
         <div className="space-y-2 md:col-span-2">
           <label className="block text-sm font-semibold text-gray-700">
-            Observações
+            Descrição
           </label>
 
           <textarea
-            name="observacoes"
-            value={paciente.observacoes}
-            onChange={(e) =>
-              handlerChange("observacoes", e.target.value)
-            }
-            placeholder="Informações adicionais sobre o paciente..."
+            name="descricao"
+            value={tratamento.descricao}
+            onChange={(e) => handlerChange("descricao", e.target.value)}
             rows={4}
+            placeholder="Descreva o tratamento..."
             className="w-full resize-none rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
           />
         </div>
@@ -208,7 +252,7 @@ export default function PacienteForm({pacienteExistente}: PacienteFormProps) {
       <div className="flex items-center justify-end gap-4 border-t border-purple-100 pt-4">
 
         <Link
-          href="/pacientes"
+          href="/home/tratamentos"
           className="rounded-xl border border-purple-200 px-5 py-3 text-center font-semibold text-purple-700 transition hover:bg-purple-50"
         >
           Cancelar

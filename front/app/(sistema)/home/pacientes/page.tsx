@@ -1,6 +1,55 @@
-import Link from "next/link";
+"use client";
+
+import axios from "@/node_modules/axios/index";
+import Link from "@/node_modules/next/link";
+import { useEffect, useState } from "react";
+import { Paciente } from "@/app/types/paciente";
 
 export default function Pacientes() {
+  const [pacientes, setPacientes] = useState<Paciente[]>([]);
+
+  useEffect(() => {
+    carregarDados();
+  }, []);
+
+  const carregarDados = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      // COLOCAR A URL DO GET DE PACIENTES DO SWAGGER AQUI
+      const dados = await axios.get<Paciente[]>(
+        "",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setPacientes(dados.data);
+    } catch (error) {
+      alert("Erro ao carregar dados!");
+    }
+  };
+
+  const handleDeletarPaciente = async (paciente: Paciente) => {
+
+    // COLOCAR A URL DO DELETE DO SWAGGER AQUI
+    var dadosRetorno = await axios.delete(
+      ""
+    );
+
+    if (dadosRetorno.status == 200) {
+      alert("Excluído com sucesso!");
+    } else {
+      alert(dadosRetorno.data);
+
+      return;
+    }
+
+    carregarDados();
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-100 px-6 py-10 md:px-10">
       <div className="mx-auto w-full max-w-7xl">
@@ -31,6 +80,7 @@ export default function Pacientes() {
 
         {/* Lista de pacientes */}
         <div className="overflow-hidden rounded-2xl border border-purple-100 bg-white shadow-sm">
+
           <div className="border-b border-purple-100 bg-purple-50 px-6 py-4">
             <h2 className="text-lg font-semibold text-purple-800">
               Lista de pacientes
@@ -39,8 +89,14 @@ export default function Pacientes() {
 
           <div className="overflow-x-auto">
             <table className="w-full text-left">
+
               <thead>
                 <tr className="border-b border-gray-100 text-sm text-gray-500">
+
+                  <th className="px-6 py-4 font-semibold">
+                    Código
+                  </th>
+
                   <th className="px-6 py-4 font-semibold">
                     Nome
                   </th>
@@ -54,84 +110,80 @@ export default function Pacientes() {
                   </th>
 
                   <th className="px-6 py-4 font-semibold">
-                    Status
+                    E-mail
                   </th>
 
                   <th className="px-6 py-4 font-semibold">
                     Ações
                   </th>
+
                 </tr>
               </thead>
 
               <tbody>
-                <tr className="border-b border-gray-100 transition hover:bg-purple-50/50">
-                  <td className="px-6 py-5">
-                    <div>
-                      <p className="font-semibold text-gray-800">
-                        Paciente exemplo
-                      </p>
 
-                      <p className="text-sm text-gray-500">
-                        paciente@email.com
-                      </p>
-                    </div>
-                  </td>
+                {pacientes.map((paciente) => (
+                  <tr
+                    key={paciente.id}
+                    className="border-b border-gray-100 transition hover:bg-purple-50/50"
+                  >
 
-                  <td className="px-6 py-5 text-gray-600">
-                    000.000.000-00
-                  </td>
+                    <td className="px-6 py-5 text-gray-600">
+                      {paciente.id}
+                    </td>
 
-                  <td className="px-6 py-5 text-gray-600">
-                    (00) 00000-0000
-                  </td>
+                    <td className="px-6 py-5 font-semibold text-gray-800">
+                      {paciente.nome}
+                    </td>
 
-                  <td className="px-6 py-5">
-                    <span className="rounded-full bg-purple-100 px-3 py-1 text-sm font-semibold text-purple-700">
-                      Em acompanhamento
-                    </span>
-                  </td>
+                    <td className="px-6 py-5 text-gray-600">
+                      {paciente.cpf}
+                    </td>
 
-                  <td className="px-6 py-5">
-                    <button className="font-semibold text-purple-700 transition hover:text-purple-900">
-                      Visualizar
-                    </button>
-                  </td>
-                </tr>
+                    <td className="px-6 py-5 text-gray-600">
+                      {paciente.telefone}
+                    </td>
 
-                <tr className="transition hover:bg-purple-50/50">
-                  <td className="px-6 py-5">
-                    <div>
-                      <p className="font-semibold text-gray-800">
-                        Outro paciente
-                      </p>
+                    <td className="px-6 py-5 text-gray-600">
+                      {paciente.email}
+                    </td>
 
-                      <p className="text-sm text-gray-500">
-                        outro@email.com
-                      </p>
-                    </div>
-                  </td>
+                    <td className="px-6 py-5">
+                      <div className="flex items-center gap-4">
 
-                  <td className="px-6 py-5 text-gray-600">
-                    111.111.111-11
-                  </td>
+                        <Link
+                          href={`/home/pacientes/${paciente.id}/editar`}
+                          className="font-semibold text-purple-700 transition hover:text-purple-900"
+                        >
+                          Editar
+                        </Link>
 
-                  <td className="px-6 py-5 text-gray-600">
-                    (00) 99999-9999
-                  </td>
+                        <button
+                          onClick={() => handleDeletarPaciente(paciente)}
+                          className="font-medium text-red-600 transition-colors hover:text-red-800"
+                        >
+                          DELETAR
+                        </button>
 
-                  <td className="px-6 py-5">
-                    <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
-                      Ativo
-                    </span>
-                  </td>
+                      </div>
+                    </td>
 
-                  <td className="px-6 py-5">
-                    <button className="font-semibold text-purple-700 transition hover:text-purple-900">
-                      Visualizar
-                    </button>
-                  </td>
-                </tr>
+                  </tr>
+                ))}
+
+                {pacientes.length === 0 && (
+                  <tr>
+                    <td
+                      colSpan={6}
+                      className="px-6 py-12 text-center text-gray-500"
+                    >
+                      Nenhum paciente encontrado!
+                    </td>
+                  </tr>
+                )}
+
               </tbody>
+
             </table>
           </div>
         </div>
@@ -170,6 +222,7 @@ export default function Pacientes() {
           </div>
 
         </div>
+
       </div>
     </div>
   );
