@@ -1,24 +1,35 @@
 @import "tailwindcss";
 
+/*
+  Define as cores principais do sistema.
+
+  O FisioCare utiliza um tema claro,
+  independentemente das configurações
+  de aparência do dispositivo.
+*/
 :root {
+  color-scheme: light;
+
   --background: #ffffff;
   --foreground: #171717;
 }
 
+/*
+  Disponibiliza as variáveis de cores
+  e fontes para o Tailwind CSS.
+*/
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/*
+  Define as cores e a fonte padrão
+  utilizadas pelo corpo da aplicação.
+*/
 body {
   background: var(--background);
   color: var(--foreground);
