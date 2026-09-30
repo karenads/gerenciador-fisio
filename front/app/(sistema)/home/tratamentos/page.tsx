@@ -16,20 +16,10 @@ export default function Tratamentos() {
   const carregarDados = async () => {
     try {
 
-      // COLOCAR A URL DO GET DO SWAGGER AQUI
-      const url = "";
-
-      // Enquanto não tivermos o endpoint,
-      // mantém a lista vazia e não faz a requisição.
-      if (!url) {
-        setTratamentos([]);
-        return;
-      }
-
       const token = localStorage.getItem("token");
 
       const dados = await axios.get<Tratamento[]>(
-        url,
+        "http://localhost:8080/tratamentos",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -40,7 +30,36 @@ export default function Tratamentos() {
       setTratamentos(dados.data);
 
     } catch (error) {
+      console.error(error);
       alert("Erro ao carregar tratamentos!");
+    }
+  };
+
+  const handleDeletarTratamento = async (tratamento: Tratamento) => {
+    try {
+
+      const token = localStorage.getItem("token");
+
+      const dadosRetorno = await axios.delete(
+        "http://localhost:8080/tratamentos/" + tratamento.id + "/excluir",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (dadosRetorno.status == 200) {
+        alert("Excluído com sucesso!");
+        carregarDados();
+      } else {
+        alert(dadosRetorno.data);
+        return;
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao excluir tratamento!");
     }
   };
 
@@ -170,22 +189,37 @@ export default function Tratamentos() {
                     {/* Status */}
                     <td className="px-6 py-5">
 
-                      <span className="rounded-full bg-purple-100 px-3 py-1 text-sm font-semibold text-purple-700">
-                        {tratamento.status}
-                      </span>
+                      {tratamento.status === "EXCLUIDO" ? (
+                        <span className="rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-700">
+                          {tratamento.status}
+                        </span>
+                      ) : (
+                        <span className="rounded-full bg-purple-100 px-3 py-1 text-sm font-semibold text-purple-700">
+                          {tratamento.status}
+                        </span>
+                      )}
 
                     </td>
 
                     {/* Ações */}
                     <td className="px-6 py-5">
+                      <div className="flex items-center gap-4">
 
-                      <Link
-                        href={`/home/tratamentos/${tratamento.id}/editar`}
-                        className="font-semibold text-purple-700 transition hover:text-purple-900"
-                      >
-                        Editar
-                      </Link>
+                        <Link
+                          href={`/home/tratamentos/${tratamento.id}/editar`}
+                          className="font-semibold text-purple-700 transition hover:text-purple-900"
+                        >
+                          Editar
+                        </Link>
 
+                        <button
+                          onClick={() => handleDeletarTratamento(tratamento)}
+                          className="font-medium text-red-600 transition-colors hover:text-red-800"
+                        >
+                          DELETAR
+                        </button>
+
+                      </div>
                     </td>
 
                   </tr>

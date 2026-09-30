@@ -1,6 +1,7 @@
 package com.example.gerenciadorfisio.controllers;
 
-import com.example.gerenciadorfisio.entities.EnumStatusUsuario;
+import com.example.gerenciadorfisio.DTOs.AtualizarStatusPacienteRequest;
+import com.example.gerenciadorfisio.entities.EnumStatusPaciente;
 import com.example.gerenciadorfisio.entities.Paciente;
 import com.example.gerenciadorfisio.repository.PacienteRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,6 +47,17 @@ public class PacienteController {
         return ResponseEntity.ok(pacienteBanco);
     }
 
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Void> atualizarStatus(@PathVariable Long id, @RequestBody AtualizarStatusPacienteRequest statusRequest){
+        Paciente pacienteBanco = pacienteRepository.findById(id).orElse(null);
+        if (pacienteBanco != null){
+            pacienteBanco.setStatus(statusRequest.status());
+            pacienteRepository.save(pacienteBanco);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @PutMapping("/{id}")
     @Operation(summary = "Método de edição de pacientes",
             description = "Método responsável pela edição de pacientes cadastrados no sistema")
@@ -75,7 +87,7 @@ public class PacienteController {
     public ResponseEntity<Void> excluir(@PathVariable Long id){
         Paciente pacienteBanco = pacienteRepository.findById(id).orElse(null);
         if (pacienteBanco != null){
-            pacienteBanco.setStatus(EnumStatusUsuario.EXCLUIDO);
+            pacienteBanco.setStatus(EnumStatusPaciente.EXCLUIDO);
             pacienteRepository.save(pacienteBanco);
             return ResponseEntity.ok().build();
         }

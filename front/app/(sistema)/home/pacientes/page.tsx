@@ -16,9 +16,8 @@ export default function Pacientes() {
     try {
       const token = localStorage.getItem("token");
 
-      // COLOCAR A URL DO GET DE PACIENTES DO SWAGGER AQUI
       const dados = await axios.get<Paciente[]>(
-        "",
+        "http://localhost:8080/pacientes",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -27,27 +26,38 @@ export default function Pacientes() {
       );
 
       setPacientes(dados.data);
+
     } catch (error) {
+      console.error(error);
       alert("Erro ao carregar dados!");
     }
   };
 
   const handleDeletarPaciente = async (paciente: Paciente) => {
+    try {
+      const token = localStorage.getItem("token");
 
-    // COLOCAR A URL DO DELETE DO SWAGGER AQUI
-    var dadosRetorno = await axios.delete(
-      ""
-    );
+      const dadosRetorno = await axios.delete(
+        "http://localhost:8080/pacientes/" + paciente.id + "/excluir",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    if (dadosRetorno.status == 200) {
-      alert("Excluído com sucesso!");
-    } else {
-      alert(dadosRetorno.data);
+      if (dadosRetorno.status == 200) {
+        alert("Excluído com sucesso!");
+        carregarDados();
+      } else {
+        alert(dadosRetorno.data);
+        return;
+      }
 
-      return;
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao excluir paciente!");
     }
-
-    carregarDados();
   };
 
   return (
@@ -114,6 +124,10 @@ export default function Pacientes() {
                   </th>
 
                   <th className="px-6 py-4 font-semibold">
+                    Status
+                  </th>
+
+                  <th className="px-6 py-4 font-semibold">
                     Ações
                   </th>
 
@@ -148,6 +162,22 @@ export default function Pacientes() {
                       {paciente.email}
                     </td>
 
+                    {/* Status */}
+                    <td className="px-6 py-5">
+
+                      {paciente.status === "EXCLUIDO" ? (
+                        <span className="rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-700">
+                          EXCLUIDO
+                        </span>
+                      ) : (
+                        <span className="rounded-full bg-purple-100 px-3 py-1 text-sm font-semibold text-purple-700">
+                          ATIVO
+                        </span>
+                      )}
+
+                    </td>
+
+                    {/* Ações */}
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-4">
 
@@ -174,7 +204,7 @@ export default function Pacientes() {
                 {pacientes.length === 0 && (
                   <tr>
                     <td
-                      colSpan={6}
+                      colSpan={7}
                       className="px-6 py-12 text-center text-gray-500"
                     >
                       Nenhum paciente encontrado!

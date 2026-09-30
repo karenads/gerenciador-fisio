@@ -9,15 +9,11 @@ import { useState } from "react";
 export default function SessaoForm({ sessaoExistente }: SessaoFormProps) {
   const router = useRouter();
 
-  // Cria o estado da sessão.
-  // Se estiver editando, utiliza a sessão que já existe.
-  // Se estiver cadastrando, cria uma sessão vazia.
   const [sessao, setSessao] = useState<Sessao>(
     sessaoExistente ||
-    new Sessao(null, "", "", "", "", false)
+    new Sessao(null, "", "", "", "", false, "ATIVO")
   );
 
-  // Atualiza os campos de texto da sessão
   const handlerChange = (
     campo: "data" | "horario" | "descricao" | "observacoes",
     valor: string
@@ -30,12 +26,12 @@ export default function SessaoForm({ sessaoExistente }: SessaoFormProps) {
           campo === "horario" ? valor : valorAnterior.horario,
           campo === "descricao" ? valor : valorAnterior.descricao,
           campo === "observacoes" ? valor : valorAnterior.observacoes,
-          valorAnterior.realizada
+          valorAnterior.realizada,
+          valorAnterior.status
         )
     );
   };
 
-  // Atualiza o campo booleano "realizada"
   const handlerRealizada = (valor: boolean) => {
     setSessao(
       valorAnterior =>
@@ -45,49 +41,64 @@ export default function SessaoForm({ sessaoExistente }: SessaoFormProps) {
           valorAnterior.horario,
           valorAnterior.descricao,
           valorAnterior.observacoes,
-          valor
+          valor,
+          valorAnterior.status
         )
     );
   };
 
   const handlerSalvar = async (formData: FormData) => {
+    try {
+      const token = localStorage.getItem("token");
 
-    // Editar
-    if (sessaoExistente) {
+      // EDITAR
+      if (sessaoExistente) {
 
-      // COLOCAR A URL DO PUT DO SWAGGER AQUI
-      var dadosRetorno = await axios.put<number>(
-        "",
-        sessao
-      );
+        var dadosRetorno = await axios.put(
+          "http://localhost:8080/sessoes/" + sessao.id,
+          sessao,
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
 
-      if (dadosRetorno.status == 200) {
-        alert("Sessão foi salva com sucesso!");
+        if (dadosRetorno.status == 200) {
+          alert("Sessão foi atualizada com sucesso!");
+        } else {
+          alert(dadosRetorno.data);
+          return;
+        }
+
+      // CADASTRAR
       } else {
-        alert(dadosRetorno.data);
 
-        return;
+        var dadosRetorno = await axios.post(
+          "http://localhost:8080/sessoes",
+          sessao,
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+
+        if (dadosRetorno.status == 200 || dadosRetorno.status == 201) {
+          alert("Sessão foi salva com sucesso!");
+        } else {
+          alert(dadosRetorno.data);
+          return;
+        }
       }
 
-    // Cadastrar
-    } else {
+      router.push("/home/sessoes");
+      router.refresh();
 
-      // COLOCAR A URL DO POST DO SWAGGER AQUI
-      var dadosRetorno = await axios.post<number>(
-        "",
-        sessao
-      );
-
-      if (dadosRetorno.status == 200) {
-        alert("Sessão foi salva com sucesso!");
-      } else {
-        alert(dadosRetorno.data);
-
-        return;
-      }
+    } catch (error) {
+      console.error("Erro ao salvar sessão:", error);
+      alert("Erro ao salvar sessão!");
     }
-
-    router.push("/home/sessoes");
   };
 
   return (

@@ -7,7 +7,7 @@ export class Tratamento {
     public dataFinal: string,
     public totalSessoes: number,
     public sessoesRealizadas: number,
-    public status: string
+    public status: "ATIVO" | "EXCLUIDO"
   ) {}
 }
 

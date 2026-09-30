@@ -5,7 +5,8 @@ export class Sessao {
     public horario: string,
     public descricao: string,
     public observacoes: string,
-    public realizada: boolean
+    public realizada: boolean,
+    public status: "ATIVO" | "EXCLUIDO"
   ) {}
 }
 

@@ -7,7 +7,8 @@ export class Paciente {
         public email: string,
         public dataNascimento: string,
         public endereco: string,
-        public observacoes: string
+        public observacoes: string,
+        public status: string
     ) {}
 }
 

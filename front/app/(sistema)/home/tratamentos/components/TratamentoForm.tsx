@@ -12,8 +12,6 @@ export default function TratamentoForm({
 
   const router = useRouter();
 
-  // Se estiver editando, utiliza o tratamento existente.
-  // Se estiver cadastrando, cria um tratamento vazio.
   const [tratamento, setTratamento] = useState<Tratamento>(
     tratamentoExistente ||
     new Tratamento(
@@ -24,13 +22,12 @@ export default function TratamentoForm({
       "",
       0,
       0,
-      ""
+      "ATIVO"
     )
   );
 
-  // Atualiza os campos de texto e data
   const handlerChange = (
-    campo: "nome" | "descricao" | "dataInicio" | "dataFinal" | "status",
+    campo: "nome" | "descricao" | "dataInicio" | "dataFinal",
     valor: string
   ) => {
     setTratamento(
@@ -43,12 +40,11 @@ export default function TratamentoForm({
           campo === "dataFinal" ? valor : valorAnterior.dataFinal,
           valorAnterior.totalSessoes,
           valorAnterior.sessoesRealizadas,
-          campo === "status" ? valor : valorAnterior.status
+          valorAnterior.status
         )
     );
   };
 
-  // Atualiza os campos numéricos
   const handlerChangeNumero = (
     campo: "totalSessoes" | "sessoesRealizadas",
     valor: number
@@ -71,55 +67,60 @@ export default function TratamentoForm({
   };
 
   const handlerSalvar = async (formData: FormData) => {
+    try {
 
-    // Editar
-    if (tratamentoExistente) {
+      const token = localStorage.getItem("token");
 
-      // COLOCAR A URL DO PUT DO SWAGGER AQUI
-      const url = "";
+      // EDITAR
+      if (tratamentoExistente) {
 
-      if (!url) {
-        alert("Endpoint de edição ainda não configurado.");
-        return;
-      }
+        const dadosRetorno = await axios.put(
+          "http://localhost:8080/tratamentos/" + tratamento.id,
+          tratamento,
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
 
-      const dadosRetorno = await axios.put<number>(
-        url,
-        tratamento
-      );
+        if (dadosRetorno.status == 200) {
+          alert("Tratamento foi atualizado com sucesso!");
+        } else {
+          alert(dadosRetorno.data);
+          return;
+        }
 
-      if (dadosRetorno.status == 200) {
-        alert("Tratamento foi salvo com sucesso!");
+      // CADASTRAR
       } else {
-        alert(dadosRetorno.data);
-        return;
+
+        const dadosRetorno = await axios.post(
+          "http://localhost:8080/tratamentos",
+          tratamento,
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+
+        if (dadosRetorno.status == 200 || dadosRetorno.status == 201) {
+          alert("Tratamento foi salvo com sucesso!");
+        } else {
+          alert(dadosRetorno.data);
+          return;
+        }
       }
 
-    // Cadastrar
-    } else {
+      router.push("/home/tratamentos");
+      router.refresh();
 
-      // COLOCAR A URL DO POST DO SWAGGER AQUI
-      const url = "";
+    } catch (error) {
 
-      if (!url) {
-        alert("Endpoint de cadastro ainda não configurado.");
-        return;
-      }
+      console.error(error);
+      alert("Erro ao salvar tratamento!");
 
-      const dadosRetorno = await axios.post<number>(
-        url,
-        tratamento
-      );
-
-      if (dadosRetorno.status == 200) {
-        alert("Tratamento foi salvo com sucesso!");
-      } else {
-        alert(dadosRetorno.data);
-        return;
-      }
     }
-
-    router.push("/home/tratamentos");
   };
 
   return (
@@ -140,22 +141,6 @@ export default function TratamentoForm({
             required
             type="text"
             placeholder="Digite o nome do tratamento"
-            className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
-          />
-        </div>
-
-        {/* Status */}
-        <div className="space-y-2">
-          <label className="block text-sm font-semibold text-gray-700">
-            Status
-          </label>
-
-          <input
-            name="status"
-            value={tratamento.status}
-            onChange={(e) => handlerChange("status", e.target.value)}
-            type="text"
-            placeholder="Digite o status"
             className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
           />
         </div>

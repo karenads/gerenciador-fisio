@@ -33,4 +33,6 @@ public class Paciente {
 
     private String observacoes;
 
+    private EnumStatusPaciente status;
+
 }

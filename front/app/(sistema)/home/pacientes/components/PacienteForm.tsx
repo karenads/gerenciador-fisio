@@ -6,20 +6,40 @@ import Link from "@/node_modules/next/link";
 import { useRouter } from "@/node_modules/next/navigation";
 import { useState } from "react";
 
-export default function PacienteForm({pacienteExistente}: PacienteFormProps) {
+export default function PacienteForm({
+  pacienteExistente
+}: PacienteFormProps) {
+
   const router = useRouter();
 
-  // Cria o estado do paciente.
-  // Se estiver editando, utiliza o paciente que já existe.
-  // Se estiver cadastrando, cria um paciente vazio.
+  // Se estiver editando, utiliza o paciente existente.
+  // Se estiver cadastrando, cria um paciente novo com status ATIVO.
   const [paciente, setPaciente] = useState<Paciente>(
     pacienteExistente ||
-    new Paciente(null, "", "", "", "", "", "", "")
+    new Paciente(
+      null,
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "ATIVO"
+    )
   );
 
   // Atualiza o campo que foi alterado no formulário
+  // mantendo o status atual do paciente.
   const handlerChange = (
-    campo: "nome" | "cpf" | "telefone" | "email" | "dataNascimento" | "endereco" | "observacoes",
+    campo:
+      | "nome"
+      | "cpf"
+      | "telefone"
+      | "email"
+      | "dataNascimento"
+      | "endereco"
+      | "observacoes",
     valor: string
   ) => {
     setPaciente(
@@ -30,51 +50,76 @@ export default function PacienteForm({pacienteExistente}: PacienteFormProps) {
           campo === "cpf" ? valor : valorAnterior.cpf,
           campo === "telefone" ? valor : valorAnterior.telefone,
           campo === "email" ? valor : valorAnterior.email,
-          campo === "dataNascimento" ? valor : valorAnterior.dataNascimento,
+          campo === "dataNascimento"
+            ? valor
+            : valorAnterior.dataNascimento,
           campo === "endereco" ? valor : valorAnterior.endereco,
-          campo === "observacoes" ? valor : valorAnterior.observacoes
+          campo === "observacoes"
+            ? valor
+            : valorAnterior.observacoes,
+          valorAnterior.status
         )
     );
   };
 
   const handlerSalvar = async (formData: FormData) => {
+    try {
 
-    // Editar
-    if (pacienteExistente) {
+      const token = localStorage.getItem("token");
 
-      // COLOCAR A URL DO PUT DO SWAGGER AQUI
-      var dadosRetorno = await axios.put<number>(
-        "",
-        paciente
-      );
+      // EDITAR
+      if (pacienteExistente) {
 
-      if (dadosRetorno.status == 200) {
-        alert("Paciente foi salvo com sucesso!");
+        const dadosRetorno = await axios.put(
+          "http://localhost:8080/pacientes/" + paciente.id,
+          paciente,
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+
+        if (dadosRetorno.status == 200) {
+          alert("Paciente foi atualizado com sucesso!");
+        } else {
+          alert(dadosRetorno.data);
+          return;
+        }
+
+      // CADASTRAR
       } else {
-        alert(dadosRetorno.data);
 
-        return;
+        const dadosRetorno = await axios.post(
+          "http://localhost:8080/pacientes",
+          paciente,
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+
+        if (
+          dadosRetorno.status == 200 ||
+          dadosRetorno.status == 201
+        ) {
+          alert("Paciente foi salvo com sucesso!");
+        } else {
+          alert(dadosRetorno.data);
+          return;
+        }
       }
 
-    // Cadastrar
-    } else {
+      router.push("/home/pacientes");
+      router.refresh();
 
-      // COLOCAR A URL DO POST DO SWAGGER AQUI
-      var dadosRetorno = await axios.post<number>(
-        "",
-        paciente
-      );
+    } catch (error) {
 
-      if (dadosRetorno.status == 200) {
-        alert("Paciente foi salvo com sucesso!");
-      } else {
-        alert(dadosRetorno.data);
+      console.error(error);
+      alert("Erro ao salvar paciente!");
 
-        return;
-      }
     }
-
-    router.push("/pacientes");
   };
 
   return (
@@ -177,7 +222,9 @@ export default function PacienteForm({pacienteExistente}: PacienteFormProps) {
           <input
             name="endereco"
             value={paciente.endereco}
-            onChange={(e) => handlerChange("endereco", e.target.value)}
+            onChange={(e) =>
+              handlerChange("endereco", e.target.value)
+            }
             type="text"
             placeholder="Digite o endereço do paciente"
             className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
@@ -208,7 +255,7 @@ export default function PacienteForm({pacienteExistente}: PacienteFormProps) {
       <div className="flex items-center justify-end gap-4 border-t border-purple-100 pt-4">
 
         <Link
-          href="/pacientes"
+          href="/home/pacientes"
           className="rounded-xl border border-purple-200 px-5 py-3 text-center font-semibold text-purple-700 transition hover:bg-purple-50"
         >
           Cancelar

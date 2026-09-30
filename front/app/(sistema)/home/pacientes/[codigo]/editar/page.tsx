@@ -20,15 +20,27 @@ export default function EditarPaciente() {
   }, []);
 
   const buscarDados = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-    // COLOCAR A URL DO GET POR CÓDIGO DO SWAGGER AQUI
-    const valorPacienteBack = await axios.get<Paciente>(
-      "" + codigo
-    );
+      const valorPacienteBack = await axios.get<Paciente>(
+        "http://localhost:8080/pacientes/" + codigo,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    if (valorPacienteBack.status == 200) {
-      setPaciente(valorPacienteBack.data);
-    } else {
+      if (valorPacienteBack.status == 200) {
+        setPaciente(valorPacienteBack.data);
+      } else {
+        router.push("/home/pacientes");
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao buscar paciente!");
       router.push("/home/pacientes");
     }
   };

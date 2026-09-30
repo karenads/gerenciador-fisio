@@ -20,15 +20,25 @@ export default function EditarSessao() {
   }, []);
 
   const buscarDados = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-    // COLOCAR A URL DO GET POR CÓDIGO DO SWAGGER AQUI
-    const valorSessaoBack = await axios.get<Sessao>(
-      "" + codigo
-    );
+      const valorSessaoBack = await axios.get<Sessao>(
+        "http://localhost:8080/sessoes/" + codigo,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
 
-    if (valorSessaoBack.status == 200) {
-      setSessao(valorSessaoBack.data);
-    } else {
+      if (valorSessaoBack.status == 200) {
+        setSessao(valorSessaoBack.data);
+      } else {
+        router.push("/home/sessoes");
+      }
+    } catch (error) {
+      alert("Erro ao carregar dados da sessão!");
       router.push("/home/sessoes");
     }
   };

@@ -16,9 +16,8 @@ export default function Sessoes() {
     try {
       const token = localStorage.getItem("token");
 
-      // COLOCAR A URL DO GET DE SESSÕES DO SWAGGER AQUI
       const dados = await axios.get<Sessao[]>(
-        "",
+        "http://localhost:8080/sessoes",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -28,26 +27,35 @@ export default function Sessoes() {
 
       setSessoes(dados.data);
     } catch (error) {
+      console.error(error);
       alert("Erro ao carregar dados!");
     }
   };
 
   const handleDeletarSessao = async (sessao: Sessao) => {
+    try {
+      const token = localStorage.getItem("token");
 
-    // COLOCAR A URL DO DELETE DO SWAGGER AQUI
-    var dadosRetorno = await axios.delete(
-      ""
-    );
+      const dadosRetorno = await axios.delete(
+        "http://localhost:8080/sessoes/" + sessao.id + "/excluir",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    if (dadosRetorno.status == 200) {
-      alert("Excluído com sucesso!");
-    } else {
-      alert(dadosRetorno.data);
-
-      return;
+      if (dadosRetorno.status == 200) {
+        alert("Excluído com sucesso!");
+        carregarDados();
+      } else {
+        alert(dadosRetorno.data);
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao excluir sessão!");
     }
-
-    carregarDados();
   };
 
   return (
@@ -110,6 +118,10 @@ export default function Sessoes() {
                   </th>
 
                   <th className="px-6 py-4 font-semibold">
+                    Realização
+                  </th>
+
+                  <th className="px-6 py-4 font-semibold">
                     Status
                   </th>
 
@@ -148,7 +160,7 @@ export default function Sessoes() {
                       {sessao.descricao}
                     </td>
 
-                    {/* Realizada */}
+                    {/* Realização */}
                     <td className="px-6 py-5">
 
                       {sessao.realizada ? (
@@ -158,6 +170,21 @@ export default function Sessoes() {
                       ) : (
                         <span className="rounded-full bg-yellow-100 px-3 py-1 text-sm font-semibold text-yellow-700">
                           Pendente
+                        </span>
+                      )}
+
+                    </td>
+
+                    {/* Status */}
+                    <td className="px-6 py-5">
+
+                      {sessao.status === "EXCLUIDO" ? (
+                        <span className="rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-700">
+                          EXCLUIDO
+                        </span>
+                      ) : (
+                        <span className="rounded-full bg-purple-100 px-3 py-1 text-sm font-semibold text-purple-700">
+                          ATIVO
                         </span>
                       )}
 
@@ -191,7 +218,7 @@ export default function Sessoes() {
                 {sessoes.length === 0 && (
                   <tr>
                     <td
-                      colSpan={6}
+                      colSpan={7}
                       className="px-6 py-12 text-center text-gray-500"
                     >
                       Nenhuma sessão encontrada!

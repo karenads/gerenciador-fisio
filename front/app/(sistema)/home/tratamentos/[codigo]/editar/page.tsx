@@ -21,27 +21,19 @@ export default function EditarTratamento() {
     buscarDados();
   }, []);
 
- const buscarDados = async () => {
-  try {
+  const buscarDados = async () => {
+    try {
 
-    // COLOCAR ENDPOINT DO GET POR CÓDIGO AQUI DEPOIS
-    const url: string = "";
+      const token = localStorage.getItem("token");
 
-    // Enquanto não tiver endpoint, não faz a requisição
-    if (!url) {
-      return;
-    }
-
-    const token = localStorage.getItem("token");
-
-    const valorTratamentoBack = await axios.get<Tratamento>(
-      url + codigo,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+      const valorTratamentoBack = await axios.get<Tratamento>(
+        "http://localhost:8080/tratamentos/" + codigo,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (valorTratamentoBack.status == 200) {
 
@@ -54,6 +46,8 @@ export default function EditarTratamento() {
       }
 
     } catch (error) {
+
+      console.error(error);
 
       alert("Erro ao buscar tratamento!");
 

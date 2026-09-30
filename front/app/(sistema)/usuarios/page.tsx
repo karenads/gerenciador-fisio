@@ -1,12 +1,10 @@
 "use client";
 
-import axios from "axios";
-
-import Link from "next/link";
-
+import { Usuario } from "@/app/types/usuario";
+import axios from "@/node_modules/axios/index";
+import Link from "@/node_modules/next/link";
 import { useEffect, useState } from "react";
 
-import { Usuario } from "../../types/usuario";
 
 export default function Usuarios() {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
