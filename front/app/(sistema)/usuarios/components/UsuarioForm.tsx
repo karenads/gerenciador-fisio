@@ -2,7 +2,9 @@
 
 /*
   Link permite navegar entre as páginas do Next.js.
+
   Usuario define a estrutura dos dados do usuário.
+
   UsuarioFormProps define as propriedades recebidas pelo formulário.
 */
 import Link from "next/link";
@@ -22,7 +24,9 @@ import axios from "axios";
   para editar usuários.
 
   usuarioExistente é uma propriedade opcional.
+
   Se existir, estamos editando um usuário.
+
   Caso contrário, estamos cadastrando.
 */
 export default function UsuarioForm({ usuarioExistente }: UsuarioFormProps) {
@@ -99,7 +103,6 @@ export default function UsuarioForm({ usuarioExistente }: UsuarioFormProps) {
     );
   };
 
-
   /*
     SALVAR USUÁRIO
 
@@ -114,94 +117,133 @@ export default function UsuarioForm({ usuarioExistente }: UsuarioFormProps) {
   */
   const handlerSalvar = async (formData: FormData) => {
 
-    /*
-      EDITAR
-
-      Se usuarioExistente foi recebido,
-      significa que estamos editando um usuário.
-    */
-    if (usuarioExistente) {
+    try {
 
       /*
-        AXIOS PUT
+        Recupera o token armazenado no localStorage.
 
-        Envia os dados atualizados para o backend.
-
-        O ID é colocado na URL para identificar
-        qual usuário deve ser atualizado.
-
-        Exemplo:
-        PUT http://localhost:8080/usuarios/3
-
-        O objeto usuario é enviado no corpo da requisição.
-
-        <number> informa ao TypeScript o tipo
-        esperado no corpo da resposta.
+        Esse token foi salvo após o login e será enviado
+        no cabeçalho Authorization das requisições
+        protegidas pelo backend.
       */
-      var dadosRetorno = await
-        axios.put<number>('http://localhost:8080/usuarios/' + usuario.id, usuario);
+      const token = localStorage.getItem("token");
 
       /*
-        Verifica se o backend respondeu com HTTP 200,
-        indicando que a requisição foi bem-sucedida.
+        EDITAR
+
+        Se usuarioExistente foi recebido,
+        significa que estamos editando um usuário.
       */
-      if (dadosRetorno.status == 200) {
+      if (usuarioExistente) {
 
-        alert("Usuário foi salvo com sucesso!");
+        /*
+          AXIOS PUT
 
-      } else {
+          Envia os dados atualizados para o backend.
 
-        // Exibe a resposta caso o status seja diferente.
-        alert(dadosRetorno.data);
+          O ID é colocado na URL para identificar
+          qual usuário deve ser atualizado.
 
-        // Interrompe a função sem redirecionar.
-        return;
-      }
+          Exemplo:
+          PUT http://localhost:8080/usuarios/3
 
+          O objeto usuario é enviado no corpo da requisição.
+
+          O token é enviado no cabeçalho Authorization
+          utilizando o padrão Bearer.
+        */
+        var dadosRetorno = await axios.put<number>(
+          "http://localhost:8080/usuarios/" + usuario.id,
+          usuario,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        /*
+          Verifica se o backend respondeu com HTTP 200,
+          indicando que a requisição foi bem-sucedida.
+        */
+        if (dadosRetorno.status == 200) {
+
+          alert("Usuário foi salvo com sucesso!");
+
+        } else {
+
+          // Exibe a resposta caso o status seja diferente.
+          alert(dadosRetorno.data);
+
+          // Interrompe a função sem redirecionar.
+          return;
+        }
 
       /*
         CADASTRAR
-  
+
         Se usuarioExistente não foi recebido,
         estamos cadastrando um novo usuário.
       */
-    } else {
-
-      /*
-        AXIOS POST
-
-        Envia o objeto usuario para o backend,
-        solicitando a criação de um novo registro.
-
-        POST http://localhost:8080/usuarios
-      */
-      var dadosRetorno = await axios.post<number>('http://localhost:8080/usuarios', usuario)
-
-      /*
-        Verifica se a resposta HTTP foi 200.
-
-        Este código mantém a verificação utilizada
-        originalmente no formulário.
-      */
-      if (dadosRetorno.status == 200) {
-
-        alert("Usuário foi salvo com sucesso!");
-
       } else {
 
-        alert(dadosRetorno.data);
+        /*
+          AXIOS POST
 
-        return;
+          Envia o objeto usuario para o backend,
+          solicitando a criação de um novo registro.
+
+          POST http://localhost:8080/usuarios
+
+          O token também é enviado no cabeçalho
+          Authorization utilizando Bearer.
+        */
+        var dadosRetorno = await axios.post<number>(
+          "http://localhost:8080/usuarios",
+          usuario,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        /*
+          O cadastro pode retornar HTTP 200
+          ou HTTP 201 indicando sucesso.
+        */
+        if (
+          dadosRetorno.status == 200 ||
+          dadosRetorno.status == 201
+        ) {
+
+          alert("Usuário foi salvo com sucesso!");
+
+        } else {
+
+          alert(dadosRetorno.data);
+
+          return;
+        }
       }
 
+      /*
+        Após cadastrar ou editar com sucesso,
+        redireciona para a listagem de usuários.
+      */
+      router.push("/usuarios");
+
+    } catch (error) {
+
+      /*
+        Caso aconteça algum erro na requisição,
+        ele é exibido no console e o usuário
+        recebe uma mensagem de erro.
+      */
+      console.error("Erro ao salvar usuário:", error);
+
+      alert("Erro ao salvar usuário!");
     }
-
-    /*
-      Após cadastrar ou editar com sucesso,
-      redireciona para a listagem de usuários.
-    */
-    router.push("/usuarios");
-
   }
 
   /*
