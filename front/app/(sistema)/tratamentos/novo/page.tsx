@@ -1,5 +1,5 @@
 import Link from "@/node_modules/next/link";
-import TratamentoForm from "@/app/(sistema)/home/tratamentos/components/TratamentoForm";
+import TratamentoForm from "@/app/(sistema)/tratamentos/components/TratamentoForm";
 
 export default function NovoTratamento() {
   return (
@@ -8,8 +8,9 @@ export default function NovoTratamento() {
 
         {/* Cabeçalho */}
         <div className="mb-8">
+
           <Link
-            href="/home/tratamentos"
+            href="/tratamentos"
             className="text-sm font-semibold text-purple-700 transition hover:text-purple-900"
           >
             ← Voltar para tratamentos
@@ -26,11 +27,14 @@ export default function NovoTratamento() {
           <p className="mt-2 text-gray-600">
             Preencha os dados para registrar um novo tratamento.
           </p>
+
         </div>
 
         {/* Formulário */}
         <div className="rounded-2xl border border-purple-100 bg-white p-6 shadow-sm md:p-8">
+
           <TratamentoForm />
+
         </div>
 
       </div>

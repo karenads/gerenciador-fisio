@@ -21,11 +21,11 @@ public class PasswordResetService {
 
 
     //Gera o token temporario com o tempo de 15 minutos
-    public String gerarTokenRecuperacao(String email){
+    public String gerarTokenRecuperacao(String email) {
 
         var usuario = usuarioRepository.findByEmail(email);
 
-        if (usuario.isEmpty()){
+        if (usuario.isEmpty()) {
             throw new RuntimeException("Usuario não encontrado");
         }
         String token = UUID.randomUUID().toString();
@@ -42,11 +42,20 @@ public class PasswordResetService {
     }
 
     //Verifica se o token ainda é valido
-    public boolean tokenExpirado(PasswordResetToken passwordResetToken){
+    public boolean tokenExpirado(PasswordResetToken passwordResetToken) {
         return LocalDateTime.now().isAfter(passwordResetToken.getExpiracao());
     }
 
+    /*
+      VALIDAÇÃO DO TOKEN DE RECUPERAÇÃO
 
+      Primeiro busca o token informado no banco.
+
+      Se ele não existir, é considerado inválido.
+      Depois verifica se a data de expiração já passou.
+
+      Se estiver tudo certo, retorna o token encontrado.
+    */
     public PasswordResetToken validarToken(String token) {
 
         var tokenEncontrado = passwordResetTokenRepository.findByToken(token);
@@ -64,6 +73,18 @@ public class PasswordResetService {
         return passwordResetToken;
     }
 
+
+    /*
+      RECUPERAÇÃO DA SENHA
+
+      Primeiro valida o token recebido.
+
+      Depois recupera o usuário relacionado ao token,
+      altera a senha e salva o usuário novamente no banco.
+
+      No final, o token de recuperação é excluído
+      para não poder ser reutilizado.
+    */
     public void recuperarSenha(String token, String novaSenha) {
 
         PasswordResetToken passwordResetToken = validarToken(token);

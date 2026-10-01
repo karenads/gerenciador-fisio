@@ -8,8 +8,17 @@ export default function NovaSessao() {
 
         {/* Cabeçalho */}
         <div className="mb-8">
+
+          {/*
+            Link utilizado para voltar
+            para a listagem de sessões.
+
+            Como a pasta sessoes agora está
+            diretamente dentro de (sistema),
+            a rota correta é /sessoes.
+          */}
           <Link
-            href="/home/sessoes"
+            href="/sessoes"
             className="text-sm font-semibold text-purple-700 transition hover:text-purple-900"
           >
             ← Voltar para sessões
@@ -31,6 +40,13 @@ export default function NovaSessao() {
         {/* Formulário */}
         <div className="rounded-2xl border border-purple-100 bg-white p-6 shadow-sm md:p-8">
 
+          {/*
+            Reutiliza o componente SessaoForm.
+
+            Como nenhuma sessaoExistente foi passada,
+            o formulário entende que está em modo
+            de cadastro e utiliza POST ao salvar.
+          */}
           <SessaoForm />
 
         </div>

@@ -18,11 +18,35 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.HttpURLConnection;
 
+/*
+  Controller responsável pela autenticação do sistema.
+
+  @RestController indica que esta classe recebe
+  requisições HTTP e retorna respostas.
+
+  @RequestMapping("/auth") define a rota base
+  dos endpoints de autenticação.
+
+  @Tag organiza esses endpoints no Swagger.
+*/
 @RestController
 @RequestMapping("/auth")
-@Tag(name = "Autenticação", description = "Controller de autenticação")
+@Tag(
+        name = "Autenticação",
+        description = "Controller de autenticação"
+)
 public class AuthController {
 
+    /*
+      Dependências utilizadas pelo controller.
+
+      @Autowired faz a injeção automática pelo Spring,
+      sem precisar criar os objetos manualmente com "new".
+
+      TokenService = geração de token JWT.
+      UsuarioRepository = consulta de usuários no banco.
+      PasswordResetService = recuperação e redefinição de senha.
+    */
     @Autowired
     private TokenService tokenService;
 
@@ -32,27 +56,63 @@ public class AuthController {
     @Autowired
     private PasswordResetService passwordResetService;
 
-    @PostMapping("/login")
-    @Operation(summary = "Autenticação de usuarios", description = "Método de login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
 
-        if (usuarioRepository.existsUsuarioByEmailAndSenha(loginRequest.email(), loginRequest.senha())){
+    /*
+      POST /auth/login
+
+      Recebe e-mail e senha através do LoginRequest.
+
+      O repository verifica se existe um usuário
+      com as credenciais informadas.
+
+      Se existir, o TokenService gera um JWT
+      e ele é devolvido através de LoginResponse.
+
+      Caso contrário, retorna HTTP 401 - Unauthorized.
+    */
+    @PostMapping("/login")
+    @Operation(
+            summary = "Autenticação de usuarios",
+            description = "Método de login"
+    )
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+
+        if (
+                usuarioRepository.existsUsuarioByEmailAndSenha(
+                        loginRequest.email(),
+                        loginRequest.senha()
+                )
+        ) {
 
             var token = tokenService.gerarToken(loginRequest.email());
 
-            //Gerar o token
-            return ResponseEntity.ok(new LoginResponse(token));
+            return ResponseEntity.ok(
+                    new LoginResponse(token)
+            );
         }
-        return ResponseEntity.status(HttpURLConnection.HTTP_UNAUTHORIZED).build();
+
+        return ResponseEntity
+                .status(HttpURLConnection.HTTP_UNAUTHORIZED)
+                .build();
     }
 
+
+    /*
+      POST /auth/login/esqueci-senha
+
+      Recebe o e-mail através de ForgotPasswordRequest.
+
+      O PasswordResetService gera um token temporário
+      que será utilizado no processo de recuperação da senha.
+    */
     @PostMapping("/login/esqueci-senha")
     @Operation(
             summary = "Solicitar recuperação de senha",
             description = "Gera um token temporário para recuperação da senha"
     )
     public ResponseEntity<?> esqueciSenha(
-            @RequestBody ForgotPasswordRequest request) {
+            @RequestBody ForgotPasswordRequest request
+    ) {
 
         String token = passwordResetService.gerarTokenRecuperacao(
                 request.email()
@@ -61,19 +121,32 @@ public class AuthController {
         return ResponseEntity.ok(token);
     }
 
+
+    /*
+      POST /auth/login/recuperar-senha
+
+      Recebe o token de recuperação
+      e a nova senha através de ResetPasswordRequest.
+
+      O PasswordResetService valida o token
+      e realiza a alteração da senha.
+    */
     @PostMapping("/login/recuperar-senha")
     @Operation(
             summary = "Recuperar senha",
             description = "Valida o token e altera a senha do usuário"
     )
     public ResponseEntity<?> recuperarSenha(
-            @RequestBody ResetPasswordRequest request) {
+            @RequestBody ResetPasswordRequest request
+    ) {
 
         passwordResetService.recuperarSenha(
                 request.token(),
                 request.novaSenha()
         );
 
-        return ResponseEntity.ok("Senha alterada com sucesso!");
+        return ResponseEntity.ok(
+                "Senha alterada com sucesso!"
+        );
     }
 }
