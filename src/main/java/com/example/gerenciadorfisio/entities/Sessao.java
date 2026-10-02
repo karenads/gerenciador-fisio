@@ -13,7 +13,7 @@ import java.time.LocalTime;
 /*
   Entidade que representa uma sessão de fisioterapia.
 
-  @Entity: indica que a classe será persistida no banco.
+  @Entity: indica que a classe será persistida no banco. jpa começa pra conexão
   @Data: gera getters, setters, toString, equals e hashCode.
   @NoArgsConstructor: gera construtor vazio.
   @AllArgsConstructor: gera construtor com todos os atributos.
@@ -25,7 +25,7 @@ import java.time.LocalTime;
 public class Sessao {
 
     /*
-      @Id define a chave primária.
+      @Id define a chave primária. jpa
       @GeneratedValue gera o ID automaticamente.
     */
     @Id

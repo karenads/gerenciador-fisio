@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+
 @RestController
 @RequestMapping("/pacientes")
 
@@ -27,6 +29,8 @@ public class PacienteController {
 
         return ResponseEntity.ok(pacienteRepository.findAll());
     }
+
+    //Um método é uma função dentro de uma classe que executa uma ação especifica
 
     @GetMapping("/{id}")
     public ResponseEntity<Paciente> buscarPorId(@PathVariable Long id){

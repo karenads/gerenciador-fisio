@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
   @RequestMapping("/sessoes") define a rota principal.
   Portanto, todos os endpoints deste controller começam com /sessoes.
 
-  @Tag organiza os endpoints deste controller dentro do Swagger.
+  @Tag organiza os endpoints deste controller dentro do Swagger. começo do swagger
 */
 @RestController
 @RequestMapping("/sessoes")

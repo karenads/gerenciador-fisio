@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PacienteRepository extends JpaRepository<Paciente, Long> {
 
+//conversão do objeto pro sql
+//faz a ponte entre a entidade e o banco
 
 }
 
