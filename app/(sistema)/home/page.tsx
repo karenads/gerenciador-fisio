@@ -1,13 +1,29 @@
+/*
+  Link é um componente do Next.js
+  utilizado para navegar entre páginas
+  da aplicação.
+*/
 import Link from "next/link";
 
+
+/*
+  HOME
+
+  Página inicial do sistema.
+
+  Ela funciona como um painel de acesso rápido
+  para os principais módulos do FisioCare.
+*/
 export default function Home() {
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-purple-50 via-white to-purple-100 px-6 py-10 md:px-10">
 
-      {/* Cabeçalho */}
+      {/* ==================== CABEÇALHO ==================== */}
+
       <div className="mx-auto w-full max-w-7xl">
 
         <div className="mb-10">
+
           <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-purple-600">
             FisioCare
           </p>
@@ -20,16 +36,27 @@ export default function Home() {
             Organize pacientes, tratamentos e sessões de fisioterapia
             de forma simples, prática e humanizada.
           </p>
+
         </div>
 
-        {/* Cards principais */}
+
+        {/* ==================== CARDS PRINCIPAIS ==================== */}
+
+        {/*
+          Os cards utilizam Link do Next.js
+          para navegar até os principais módulos
+          do sistema.
+        */}
         <div className="grid gap-6 md:grid-cols-3">
 
-          {/* Pacientes */}
+
+          {/* ==================== PACIENTES ==================== */}
+
           <Link
-            href="/home/pacientes"
+            href="/pacientes"
             className="group rounded-2xl border border-purple-100 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-purple-300 hover:shadow-lg"
           >
+
             <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-100 text-xl font-bold text-purple-700">
               P
             </div>
@@ -45,13 +72,17 @@ export default function Home() {
             <p className="mt-5 text-sm font-semibold text-purple-700">
               Acessar pacientes →
             </p>
+
           </Link>
 
-          {/* Tratamentos */}
+
+          {/* ==================== TRATAMENTOS ==================== */}
+
           <Link
-            href="/home/tratamentos"
+            href="/tratamentos"
             className="group rounded-2xl border border-purple-100 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-purple-300 hover:shadow-lg"
           >
+
             <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-100 text-xl font-bold text-purple-700">
               T
             </div>
@@ -67,13 +98,17 @@ export default function Home() {
             <p className="mt-5 text-sm font-semibold text-purple-700">
               Acessar tratamentos →
             </p>
+
           </Link>
 
-          {/* Sessões */}
+
+          {/* ==================== SESSÕES ==================== */}
+
           <Link
-            href="/home/sessoes"
+            href="/sessoes"
             className="group rounded-2xl border border-purple-100 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-purple-300 hover:shadow-lg"
           >
+
             <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-100 text-xl font-bold text-purple-700">
               S
             </div>
@@ -89,12 +124,17 @@ export default function Home() {
             <p className="mt-5 text-sm font-semibold text-purple-700">
               Acessar sessões →
             </p>
+
           </Link>
+
 
         </div>
 
-        {/* Bloco inferior */}
+
+        {/* ==================== BLOCO INFERIOR ==================== */}
+
         <div className="mt-10 rounded-2xl bg-purple-700 p-7 text-white shadow-lg md:p-9">
+
           <p className="text-sm font-semibold uppercase tracking-widest text-purple-200">
             Nosso propósito
           </p>
@@ -108,9 +148,12 @@ export default function Home() {
             de fisioterapia e permitir mais tempo para aquilo que realmente
             importa: o cuidado com o paciente.
           </p>
+
         </div>
 
+
       </div>
+
     </div>
   );
 }
