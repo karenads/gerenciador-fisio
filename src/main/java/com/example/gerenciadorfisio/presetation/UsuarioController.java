@@ -2,6 +2,9 @@ package com.example.gerenciadorfisio.presetation;
 
 
 import com.example.gerenciadorfisio.application.DTOs.AtualizarStatusRequest;
+import com.example.gerenciadorfisio.application.DTOs.CriarAdminRequest;
+import com.example.gerenciadorfisio.application.DTOs.CriarAdminResponse;
+import com.example.gerenciadorfisio.application.services.UsuarioService;
 import com.example.gerenciadorfisio.domain.entities.EnumStatusUsuario;
 import com.example.gerenciadorfisio.domain.entities.Usuario;
 import com.example.gerenciadorfisio.domain.repository.UsuarioRepository;
@@ -22,12 +25,29 @@ public class UsuarioController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @GetMapping
     //Esse @Operation também é do Swagger/OpenAPI, mas ele serve para documentar uma operação específica da API, enquanto o @Tag organiza o controller em um grupo
     @Operation(summary = "Método de consulta de lista de usuários!", description = "Método responsável em efetuar a consulta de todos os usuários sem filtro!")
     public ResponseEntity<?> listarTodos(){
 
         return ResponseEntity.ok(usuarioRepository.findAll());
+
+    }
+
+    @PostMapping("/admin")
+    public ResponseEntity<CriarAdminResponse> criarAdmin(@RequestBody CriarAdminRequest criarAdminRequest) {
+
+        try {
+            var respostaSalvar = usuarioService.criarAdmin(criarAdminRequest);
+
+            return ResponseEntity.ok(respostaSalvar);
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/{id}")
