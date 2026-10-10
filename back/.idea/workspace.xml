@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9656c528-ed6d-4ad5-9f1c-8219149ee8f6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../app/(sistema)/pacientes/components/PacienteForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/(sistema)/pacientes/components/PacienteForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/(sistema)/sessoes/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/(sistema)/sessoes/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/back/AdminApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/back/AdminApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/back/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/back/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/back/MenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/back/MenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/back/login-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/back/login-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/back/menu-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/back/menu-view.fxml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "karenads"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/karenads/gerenciador-fisio.git",
+    "accountId": "96d7715e-33e4-43e5-be47-92af28d8b647"
+  }
+}]]></component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="9.161184490133201E-148" />
+      <entry key="MS500" value="4.5570387118293175E-30" />
+      <entry key="S2" value="7.281451663499107E-8" />
+      <entry key="S5" value="0.0021032691343976784" />
+      <entry key="S10" value="0.06479219205753285" />
+      <entry key="S30" value="0.6374300134785217" />
+      <entry key="S60" value="1.1344248359657176" />
+      <entry key="M2" value="1.7083971497141945" />
+      <entry key="M5" value="4.399397367874004" />
+      <entry key="M10" value="9.5841269708569" />
+      <entry key="M15" value="13.390000465171846" />
+      <entry key="M30" value="19.387311530552285" />
+      <entry key="H1" value="23.620613366847465" />
+      <entry key="H2" value="26.14818369679854" />
+      <entry key="H4" value="27.53092080124115" />
+      <entry key="D1" value="28.748918817263746" />
+      <entry key="W1" value="28.9639753587074" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0" />
+      <entry key="S2" value="1.0000003437763372" />
+      <entry key="S5" value="1.0038807502903284" />
+      <entry key="S10" value="1.0878841316119754" />
+      <entry key="S30" value="1.7054210861691668" />
+      <entry key="S60" value="2.198627045126643" />
+      <entry key="M2" value="2.773977086336605" />
+      <entry key="M5" value="5.9601167575351015" />
+      <entry key="M10" value="12.75682158055448" />
+      <entry key="M15" value="17.774476681432766" />
+      <entry key="M30" value="25.615874954379205" />
+      <entry key="H1" value="31.09640283118382" />
+      <entry key="H2" value="34.348221303841186" />
+      <entry key="H4" value="36.121043202537955" />
+      <entry key="D1" value="37.679193364919364" />
+      <entry key="W1" value="37.953979482555155" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="1.4821714897400462E-4" />
+      <entry key="MS500" value="0.1714666610738247" />
+      <entry key="S2" value="0.6434948983816148" />
+      <entry key="S5" value="0.8434129980396756" />
+      <entry key="S10" value="1.0564524531711084" />
+      <entry key="S30" value="2.2788280847558458" />
+      <entry key="S60" value="3.2879997573341564" />
+      <entry key="M2" value="4.4526452179925045" />
+      <entry key="M5" value="10.323595594036846" />
+      <entry key="M10" value="22.292340617129064" />
+      <entry key="M15" value="31.116384550491535" />
+      <entry key="M30" value="44.96670492399894" />
+      <entry key="H1" value="54.6943969385162" />
+      <entry key="H2" value="60.48379262894049" />
+      <entry key="H4" value="63.64530226421172" />
+      <entry key="D1" value="66.4269497731548" />
+      <entry key="W1" value="66.91778746931875" />
+    </decayedShown>
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="3KTamh2xrrConlPcYm0nliQqw5U" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.AdminApplication.executor": "Debug",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "master",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "to.speed.mode.migration.done": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-63390994e64e-intellij.indexing.shared.core-IU-262.8665.337" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.8665.337" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9656c528-ed6d-4ad5-9f1c-8219149ee8f6" name="Changes" comment="" />
+      <created>1791584172603</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1791584172603</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

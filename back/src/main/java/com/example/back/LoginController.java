@@ -10,11 +10,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.IOException;
 
 public class LoginController {
 
-    private String key = "qualquercoisa";
+    private String key = "1234";
+
 
     @FXML
     private TextField txtKey;
@@ -23,29 +25,27 @@ public class LoginController {
     protected void onLoginButtonClick(ActionEvent event) throws IOException {
 
         if(txtKey.getText().equals(key)){
-            showMessage(Alert.AlertType.INFORMATION,"Login Efetuadol com sucesso!");
+            showMessage(Alert.AlertType.INFORMATION,"Login Efetuado com sucesso!");
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/back/menu-view.fxml"));
+            FXMLLoader loader =
+                    new FXMLLoader(getClass().getResource("/com/example/back/menu-view.fxml"));
 
             Scene scene = new Scene(loader.load());
-            Stage stage = (Stage)  ((Node) event.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
 
 
-        }else{
-
-        showMessage(Alert.AlertType.ERROR, "Erro ao Efetuar login");
+        }else {
+            showMessage(Alert.AlertType.ERROR, "Erro ao Efetuar login!");
         }
-
     }
 
     private void showMessage(Alert.AlertType type, String msg){
-        Alert alerta = new Alert(type);
-
-
-        alerta.setTitle("Mensagem do Sistema");
+        Alert alerta =new Alert(type);
+        alerta.setTitle("Mensagem do Sistema!");
         alerta.setHeaderText(null);
         alerta.setContentText(msg);
         alerta.showAndWait();
     }
+
 }

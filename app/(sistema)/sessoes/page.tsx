@@ -17,7 +17,7 @@ import Link from "@/node_modules/next/link";
   quando o componente é carregado.
 
   useState permite armazenar e atualizar
-  a lista de sessões. hook
+  a lista de sessões.
 */
 import { useEffect, useState } from "react";
 

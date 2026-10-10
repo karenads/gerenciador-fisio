@@ -27,7 +27,7 @@ import Link from "@/node_modules/next/link";
 import { useRouter } from "@/node_modules/next/navigation";
 
 /*
-  useState permite armazenar e atualizar hook
+  useState permite armazenar e atualizar
   os dados do paciente dentro do componente.
 */
 import { useState } from "react";
