@@ -5,18 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9656c528-ed6d-4ad5-9f1c-8219149ee8f6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../app/(sistema)/pacientes/components/PacienteForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/(sistema)/pacientes/components/PacienteForm.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../app/(sistema)/sessoes/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/(sistema)/sessoes/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/back/AdminApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/back/AdminApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/back/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/back/LoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/back/MenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/back/MenuController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/back/login-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/back/login-view.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/back/menu-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/back/menu-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
