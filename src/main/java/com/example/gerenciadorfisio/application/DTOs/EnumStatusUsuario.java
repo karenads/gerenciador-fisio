@@ -1,4 +1,4 @@
-package com.example.gerenciadorfisio.domain.entities;
+package com.example.gerenciadorfisio.application.DTOs;
 
 /*
   Enum que define os possíveis

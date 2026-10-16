@@ -53,4 +53,13 @@ public class UsuarioService {
 
         return new CriarAdminResponse(usuarioAdminSalvar.getId(),"Usuario Salvo com sucesso!");
     }
+
+    public UsuarioResponse salvarUsuario(UsuarioRequest usuario) {
+
+        Usuario usuarioBanco = new Usuario(usuario);
+
+
+    }
+
+
 }

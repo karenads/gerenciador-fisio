@@ -1,11 +1,9 @@
 package com.example.gerenciadorfisio.presetation;
 
 
-import com.example.gerenciadorfisio.application.DTOs.AtualizarStatusRequest;
-import com.example.gerenciadorfisio.application.DTOs.CriarAdminRequest;
-import com.example.gerenciadorfisio.application.DTOs.CriarAdminResponse;
+import com.example.gerenciadorfisio.application.DTOs.*;
 import com.example.gerenciadorfisio.application.services.UsuarioService;
-import com.example.gerenciadorfisio.domain.entities.EnumStatusUsuario;
+import com.example.gerenciadorfisio.application.DTOs.EnumStatusUsuario;
 import com.example.gerenciadorfisio.domain.entities.Usuario;
 import com.example.gerenciadorfisio.domain.repository.UsuarioRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -63,12 +61,15 @@ public class UsuarioController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Método de criação de usuários!", description = "Método responsável em efetuar a criação de novos usuários!")
-    public ResponseEntity<Usuario> criar(@RequestBody Usuario usuario){
+    public ResponseEntity<?> criar(@RequestBody UsuarioRequest usuario){
 
-        var usuarioBanco = usuarioRepository.save(usuario);
+        UsuarioResponse usuarioBanco = usuarioService.salvarUsuario(usuario);
 
-        return ResponseEntity.ok(usuarioBanco);
+        return ResponseEntity.ok(usuarioBanco);}
+        }catch(Exception e){
+
     }
+}
 
     /* Quando o cliente precisa atualizar apenas alguns atributos (ex: mudar apenas o e-mail de um usuário)*/
     @PatchMapping("/{id}/status")

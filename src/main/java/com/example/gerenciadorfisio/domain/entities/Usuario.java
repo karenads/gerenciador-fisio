@@ -1,11 +1,10 @@
 package com.example.gerenciadorfisio.domain.entities;
 
 import com.example.gerenciadorfisio.application.DTOs.CriarAdminRequest;
-import com.example.gerenciadorfisio.domain.entities.EnumStatusUsuario;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.gerenciadorfisio.application.DTOs.UsuarioRequest;
+import com.example.gerenciadorfisio.application.DTOs.EnumStatusUsuario;
+import com.example.gerenciadorfisio.domain.valueobject.CPF;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +21,8 @@ public class Usuario {
 
     private String nome;
 
-    private String cpf;
+    @Embedded
+    private CPF cpf;
 
     private String email;
 
@@ -35,11 +35,20 @@ public class Usuario {
 
     public Usuario(CriarAdminRequest criarAdminRequest) {
 
-        this.setCpf(criarAdminRequest.cpf());
+        this.setCpf(new CPF(criarAdminRequest.cpf()));
         this.setNome(criarAdminRequest.nome());
         this.setSenha(criarAdminRequest.senha());
         this.setEmail(criarAdminRequest.email());
         this.setRole("ROLE_ADMIN");
 
+    }
+
+    public Usuario(UsuarioRequest usuario) {
+
+        this.setCpf(new CPF(usuario.cpf()));
+        this.setNome(usuario.nome());
+        this.setSenha(usuario.senha());
+        this.setEmail(usuario.email());
+        this.setRole("ROLE_USER");
     }
 }
