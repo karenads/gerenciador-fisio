@@ -11,7 +11,6 @@ import java.io.IOException;
 
 public class MenuController {
 
-
     @FXML
     public void abrirCadastro(ActionEvent event) throws IOException {
         FXMLLoader loader =
@@ -20,12 +19,40 @@ public class MenuController {
         Scene scene = new Scene(loader.load());
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
-
     }
 
     @FXML
-    public void sair(){
-        System.exit(0);
+    public void abrirCadastroPaciente(ActionEvent event) throws IOException {
+        FXMLLoader loader =
+                new FXMLLoader(getClass().getResource("/com/example/back/cadastro-paciente-view.fxml"));
+
+        Scene scene = new Scene(loader.load());
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
     }
 
+    @FXML
+    public void abrirCadastroTratamento(ActionEvent event) throws IOException {
+        FXMLLoader loader =
+                new FXMLLoader(getClass().getResource("/com/example/back/cadastro-tratamento-view.fxml"));
+
+        Scene scene = new Scene(loader.load());
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+    }
+
+    @FXML
+    public void abrirCadastroSessao(ActionEvent event) throws IOException {
+        FXMLLoader loader =
+                new FXMLLoader(getClass().getResource("/com/example/back/cadastro-sessao-view.fxml"));
+
+        Scene scene = new Scene(loader.load());
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+    }
+
+    @FXML
+    public void sair() {
+        System.exit(0);
+    }
 }

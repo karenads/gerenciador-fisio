@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="460.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.back.PacienteController">
+   <children>
+      <Label layoutX="24.0" layoutY="22.0" text="Cadastro de Paciente" />
+
+      <Label layoutX="60.0" layoutY="64.0" text="Nome" />
+      <Label layoutX="60.0" layoutY="105.0" text="CPF" />
+      <Label layoutX="60.0" layoutY="146.0" text="Telefone" />
+      <Label layoutX="60.0" layoutY="187.0" text="Email" />
+      <Label layoutX="60.0" layoutY="228.0" text="Nascimento" />
+      <Label layoutX="60.0" layoutY="269.0" text="Endereço" />
+      <Label layoutX="60.0" layoutY="310.0" text="Observações" />
+
+      <TextField fx:id="txtNome" layoutX="175.0" layoutY="60.0" prefWidth="290.0" />
+      <TextField fx:id="txtCpf" layoutX="175.0" layoutY="101.0" prefWidth="290.0" />
+      <TextField fx:id="txtTelefone" layoutX="175.0" layoutY="142.0" prefWidth="290.0" />
+      <TextField fx:id="txtEmail" layoutX="175.0" layoutY="183.0" prefWidth="290.0" />
+      <TextField fx:id="txtDataNascimento" layoutX="175.0" layoutY="224.0" prefWidth="290.0" promptText="dd/MM/yyyy" />
+      <TextField fx:id="txtEndereco" layoutX="175.0" layoutY="265.0" prefWidth="290.0" />
+      <TextField fx:id="txtObservacoes" layoutX="175.0" layoutY="306.0" prefWidth="290.0" />
+
+      <Button layoutX="24.0" layoutY="410.0" mnemonicParsing="false" onAction="#voltar" text="Voltar" />
+      <Button layoutX="501.0" layoutY="410.0" mnemonicParsing="false" onAction="#salvarPaciente" text="Salvar" />
+   </children>
+</AnchorPane>
