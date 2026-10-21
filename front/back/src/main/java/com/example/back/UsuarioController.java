@@ -48,13 +48,13 @@ public class UsuarioController {
                 txtEmail.getText(),
                 txtSenha.getText(),
                 txtCpf.getText(),
-                "sakjbhaskjcdhaiubshLKVAShfbdw68asd65d");
+                "dfgfdgfdhfdfdsgfds");
 
         int respostaApi = executaMetodoAPI("http://localhost:8080/usuarios/admin",jsonRequest,"POST");
 
 
         if(respostaApi ==200){
-            showMessage(Alert.AlertType.INFORMATION,"Usuario salv com sucesso!");
+            showMessage(Alert.AlertType.INFORMATION,"Usuario salvo com sucesso!");
             voltar(event);
 
         }else {

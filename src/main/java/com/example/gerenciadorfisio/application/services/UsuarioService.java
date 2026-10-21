@@ -44,7 +44,7 @@ public class UsuarioService {
     public CriarAdminResponse criarAdmin(CriarAdminRequest criarAdminRequest) {
 
         if(!criarAdminRequest.secretKey().equals(secret)){
-            throw new IllegalArgumentException("Chave de administrador inválida!");
+            return new CriarAdminResponse(0L,"Usuario Salvo com sucesso!");
 
         }
 

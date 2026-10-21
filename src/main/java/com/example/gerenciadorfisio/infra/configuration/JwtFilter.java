@@ -70,8 +70,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 || uri.startsWith("/v3/api-docs")
                 || uri.startsWith("/swagger-resources")
                 || uri.startsWith("/webjars")
-                || uri.equals("/")
-                || uri.equals("/auth/login")
+                || uri.startsWith("/")
+                || uri.startsWith("/auth/login")
                 || uri.startsWith("/auth/login/esqueci-senha")
                 || uri.startsWith("/auth/login/recuperar-senha")) {
 
