@@ -1,9 +1,9 @@
 package com.example.gerenciadorfisio.presetation;
 
 import com.example.gerenciadorfisio.application.DTOs.AtualizarStatusTratamentoRequest;
+import com.example.gerenciadorfisio.application.services.TratamentoService;
 import com.example.gerenciadorfisio.domain.entities.EnumStatusTratamento;
 import com.example.gerenciadorfisio.domain.entities.Tratamento;
-import com.example.gerenciadorfisio.domain.repository.TratamentoRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,24 +13,22 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/tratamentos")
-
 @Tag(name = "Tratamento", description = "Grupo de APIs responsável por controlar a estrutura de criação e consulta de tratamentos do sistema!")
 public class TratamentoController {
 
     @Autowired
-    private TratamentoRepository tratamentoRepository;
+    private TratamentoService tratamentoService;
 
     @GetMapping
     @Operation(summary = "Método de consulta de lista de tratamentos!", description = "Método responsável em efetuar a consulta de todos os tratamentos sem filtro!")
-    public ResponseEntity<?> listarTodos(){
-
-        return ResponseEntity.ok(tratamentoRepository.findAll());
+    public ResponseEntity<?> listarTodos() {
+        return ResponseEntity.ok(tratamentoService.listarTodos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Tratamento> buscarPorId(@PathVariable Long id){
-        Tratamento tratamentoBanco = tratamentoRepository.findById(id).orElse(null);
-        if (tratamentoBanco != null){
+    public ResponseEntity<Tratamento> buscarPorId(@PathVariable Long id) {
+        Tratamento tratamentoBanco = tratamentoService.buscarPorId(id);
+        if (tratamentoBanco != null) {
             return ResponseEntity.ok(tratamentoBanco);
         }
         return ResponseEntity.notFound().build();
@@ -38,55 +36,37 @@ public class TratamentoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Método de cadastro de tratamento!", description = "Método responsável em efetuar o cadastro de um novo tratamento no sistema!")
-    public ResponseEntity<Tratamento> criar(@RequestBody Tratamento tratamento){
-
-        var tratamentoBanco = tratamentoRepository.save(tratamento);
-
-        return ResponseEntity.ok(tratamentoBanco);
+    public ResponseEntity<?> criar(@RequestBody Tratamento tratamento) {
+        try {
+            return ResponseEntity.ok(tratamentoService.salvarTratamento(tratamento));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Void> atualizarStatus(@PathVariable Long id, @RequestBody AtualizarStatusTratamentoRequest statusRequest){
-        Tratamento tratamentoBanco = tratamentoRepository.findById(id).orElse(null);
-        if (tratamentoBanco != null){
-            tratamentoBanco.setStatus(statusRequest.status());
-            tratamentoRepository.save(tratamentoBanco);
+    public ResponseEntity<Void> atualizarStatus(@PathVariable Long id, @RequestBody AtualizarStatusTratamentoRequest statusRequest) {
+        if (tratamentoService.atualizarStatus(id, statusRequest.status())) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Método de edição de tratamentos",
-            description = "Método responsável pela edição de tratamentos cadastrados no sistema")
-    public ResponseEntity<Tratamento> atualizar(@PathVariable Long id, @RequestBody Tratamento tratamento){
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Tratamento tratamento) {
         try {
-            Tratamento tratamentoBanco = tratamentoRepository.findById(id).orElse(null);
-            if (tratamentoBanco != null){
-                tratamentoBanco.setStatus(tratamento.getStatus());
-                tratamentoBanco.setNome(tratamento.getNome());
-                tratamentoBanco.setDescricao(tratamento.getDescricao());
-                tratamentoBanco.setDataInicio(tratamento.getDataInicio());
-                tratamentoBanco.setDataFinal(tratamento.getDataFinal());
-                tratamentoBanco.setTotalSessoes(tratamento.getTotalSessoes());
-                tratamentoBanco.setSessoesRealizadas(tratamento.getSessoesRealizadas());
-                tratamentoRepository.save(tratamentoBanco);
+            if (tratamentoService.atualizar(id, tratamento)) {
                 return ResponseEntity.ok().build();
             }
             return ResponseEntity.notFound().build();
-
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}/excluir")
-    public ResponseEntity<Void> excluir(@PathVariable Long id){
-        Tratamento tratamentoBanco = tratamentoRepository.findById(id).orElse(null);
-        if (tratamentoBanco != null){
-            tratamentoBanco.setStatus(EnumStatusTratamento.EXCLUIDO);
-            tratamentoRepository.save(tratamentoBanco);
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+        if (tratamentoService.atualizarStatus(id, EnumStatusTratamento.EXCLUIDO)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();

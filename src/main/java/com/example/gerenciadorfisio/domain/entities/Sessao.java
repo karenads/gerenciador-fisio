@@ -44,5 +44,11 @@ public class Sessao {
     private Boolean realizada;
 
     // Status definido pelos valores do EnumStatusSessao.
-    private EnumStatusSessao status;
+    private EnumStatusSessao status = EnumStatusSessao.ATIVO;
+
+    public void validarSessao() {
+        if (data == null || horario == null) {
+            throw new IllegalArgumentException("Informe a data e o horário da sessão!");
+        }
+    }
 }

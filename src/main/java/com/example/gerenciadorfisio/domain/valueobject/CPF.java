@@ -1,5 +1,8 @@
 package com.example.gerenciadorfisio.domain.valueobject;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public class CPF {
 
 
@@ -12,7 +15,7 @@ public class CPF {
 
     public CPF(String cpf){
 
-        if(isValidCpf(cpf)){
+        if(!isValidCpf(cpf)){
             throw new IllegalArgumentException("CPF inválido!");
         }
 

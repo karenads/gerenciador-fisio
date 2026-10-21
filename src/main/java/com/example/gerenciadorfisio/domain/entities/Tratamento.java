@@ -33,5 +33,14 @@ public class Tratamento {
 
     private int sessoesRealizadas;
 
-    private EnumStatusTratamento status;
+    private EnumStatusTratamento status = EnumStatusTratamento.ATIVO;
+
+    public void validarTratamento() {
+        if (totalSessoes < 0 || sessoesRealizadas < 0 || sessoesRealizadas > totalSessoes) {
+            throw new IllegalArgumentException("Quantidade de sessões inválida!");
+        }
+        if (dataInicio != null && dataFinal != null && dataFinal.isBefore(dataInicio)) {
+            throw new IllegalArgumentException("Data final não pode ser anterior à data de início!");
+        }
+    }
 }

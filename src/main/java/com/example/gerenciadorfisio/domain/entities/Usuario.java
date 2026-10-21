@@ -4,6 +4,7 @@ import com.example.gerenciadorfisio.application.DTOs.CriarAdminRequest;
 import com.example.gerenciadorfisio.application.DTOs.UsuarioRequest;
 import com.example.gerenciadorfisio.application.DTOs.EnumStatusUsuario;
 import com.example.gerenciadorfisio.domain.valueobject.CPF;
+import com.example.gerenciadorfisio.domain.valueobject.Email;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,6 +28,10 @@ public class Usuario {
     private String email;
 
     private String senha;
+
+    public void setEmail(String email) {
+        this.email = new Email(email).toString();
+    }
 
     private String role = "ROLE_USER";
 

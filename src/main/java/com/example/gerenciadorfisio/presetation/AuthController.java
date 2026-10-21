@@ -4,9 +4,8 @@ import com.example.gerenciadorfisio.application.DTOs.ForgotPasswordRequest;
 import com.example.gerenciadorfisio.application.DTOs.LoginRequest;
 import com.example.gerenciadorfisio.application.DTOs.LoginResponse;
 import com.example.gerenciadorfisio.application.DTOs.ResetPasswordRequest;
-import com.example.gerenciadorfisio.domain.repository.UsuarioRepository;
+import com.example.gerenciadorfisio.application.services.UsuarioService;
 import com.example.gerenciadorfisio.application.services.PasswordResetService;
-import com.example.gerenciadorfisio.application.services.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,10 +47,7 @@ public class AuthController {
       PasswordResetService = recuperação e redefinição de senha.
     */
     @Autowired
-    private TokenService tokenService;
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuarioService usuarioService;
 
     @Autowired
     private PasswordResetService passwordResetService;
@@ -77,23 +73,11 @@ public class AuthController {
     )
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
 
-        if (
-                usuarioRepository.existsUsuarioByEmailAndSenha(
-                        loginRequest.email(),
-                        loginRequest.senha()
-                )
-        ) {
-
-            var token = tokenService.gerarToken(loginRequest.email());
-
-            return ResponseEntity.ok(
-                    new LoginResponse(token)
-            );
+        LoginResponse resposta = usuarioService.validarUsuarioAutenticadoRetornaToken(loginRequest);
+        if (resposta != null) {
+            return ResponseEntity.ok(resposta);
         }
-
-        return ResponseEntity
-                .status(HttpURLConnection.HTTP_UNAUTHORIZED)
-                .build();
+        return ResponseEntity.status(HttpURLConnection.HTTP_UNAUTHORIZED).build();
     }
 
 
