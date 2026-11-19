@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.senac.br</groupId>
-    <artifactId>pharma</artifactId>
+    <artifactId>FisioCare</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>pharma</name>
-    <description>pharma</description>
+    <name>fisiocare</name>
+    <description>fisiocare</description>
     <url/>
     <licenses>
         <license/>
