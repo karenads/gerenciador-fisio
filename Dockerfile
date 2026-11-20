@@ -1,4 +1,4 @@
-FROM maven:3.9-eclipse-temurin-25-jammy AS builder
+FROM maven:3-eclipse-temurin-25-noble AS builder
 
 
 WORKDIR /app
@@ -7,7 +7,7 @@ COPY . .
 
 RUN mvn clean package -DskipTests
 
-FROM eclipse-temurin:25-jre-jammy
+FROM eclipse-temurin:25-jre-noble
 
 WORKDIR /app
 
