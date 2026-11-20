@@ -1,5 +1,5 @@
-FROM maven:3.9.8-eclipse-temurin-21-jammy AS builder
-LABEL authors="karenads"
+FROM maven:3.9-eclipse-temurin-25-jammy AS builder
+
 
 WORKDIR /app
 
@@ -7,7 +7,7 @@ COPY . .
 
 RUN mvn clean package -DskipTests
 
-FROM eclipse-temurin:21-jre-jammy
+FROM eclipse-temurin:25-jre-jammy
 
 WORKDIR /app
 
