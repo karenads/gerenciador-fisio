@@ -16,4 +16,9 @@ boolean existsUsuarioByEmailAndSenha(String email, String senha);
 Optional<Usuario> findByEmail(String email);
     Optional<List<Usuario>> findByStatusNot(EnumStatusUsuario status);
 
+    boolean existsByEmail(String email);
+    boolean existsByEmailAndIdNot(String email, Long id);
+    List<Usuario> findByEmpresa_Id(Long empresaId);
+    Optional<Usuario> findByIdAndEmpresa_Id(Long id, Long empresaId);
+
 }

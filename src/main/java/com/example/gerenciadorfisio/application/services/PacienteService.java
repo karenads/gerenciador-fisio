@@ -24,22 +24,16 @@ public class PacienteService implements PacientePorta {
 
     @Transactional(readOnly = true)
     public List<PacienteResponse> listarTodos() {
-        List<Paciente> pacientes = usuarioService.isAdmin()
-                ? pacienteRepository.findAll()
-                : pacienteRepository.findByResponsavel_Id(usuarioService.getUsuarioLogado().id());
+        // A empresa vem do JWT validado, nunca de parâmetros do cliente.
+        Long empresaId = usuarioService.getUsuarioLogado().empresaId();
+        List<Paciente> pacientes = pacienteRepository.findByEmpresa_Id(empresaId);
         return pacientes.stream().map(PacienteResponse::new).toList();
     }
 
     @Transactional(readOnly = true)
     public Paciente buscarPorId(Long id) {
-        Paciente paciente = pacienteRepository.findById(id).orElse(null);
-        if (paciente == null) return null;
-        if (usuarioService.isAdmin()) return paciente;
-        if (paciente.getResponsavel() != null
-                && paciente.getResponsavel().getId().equals(usuarioService.getUsuarioLogado().id())) {
-            return paciente;
-        }
-        return null;
+        return pacienteRepository.findByIdAndEmpresa_Id(id, usuarioService.getUsuarioLogado().empresaId())
+                .orElse(null);
     }
 
     @Transactional(readOnly = true)
@@ -66,6 +60,7 @@ public class PacienteService implements PacientePorta {
         Paciente paciente = new Paciente();
         preencher(paciente, request);
         paciente.setResponsavel(usuarioService.getUsuarioEntidadeLogado());
+        paciente.setEmpresa(usuarioService.getUsuarioEntidadeLogado().getEmpresa());
         return new PacienteResponse(pacienteRepository.save(paciente));
     }
 

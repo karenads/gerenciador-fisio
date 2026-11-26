@@ -8,4 +8,8 @@ import java.util.List;
 @Repository
 public interface TratamentoRepository extends JpaRepository<Tratamento, Long> {
     List<Tratamento> findByResponsavel_Id(Long id);
+
+    // A consulta já restringe os resultados à empresa autenticada.
+    List<Tratamento> findByEmpresa_Id(Long empresaId);
+    java.util.Optional<Tratamento> findByIdAndEmpresa_Id(Long id, Long empresaId);
 }

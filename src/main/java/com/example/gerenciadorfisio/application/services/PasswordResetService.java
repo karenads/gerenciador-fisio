@@ -6,6 +6,8 @@ import com.example.gerenciadorfisio.domain.repository.PasswordResetTokenReposito
 import com.example.gerenciadorfisio.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -15,6 +17,8 @@ public class PasswordResetService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
     private PasswordResetTokenRepository passwordResetTokenRepository;
@@ -91,7 +95,7 @@ public class PasswordResetService {
 
         Usuario usuario = passwordResetToken.getUsuario();
 
-        usuario.setSenha(novaSenha);
+        usuario.setSenha(passwordEncoder.encode(novaSenha));
 
         usuarioRepository.save(usuario);
 

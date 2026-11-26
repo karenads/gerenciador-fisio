@@ -6,22 +6,30 @@ services:
       - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=aulafull
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-fisiocare_local}
+      - POSTGRES_DB=fisiocare
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d fisiocare"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
     volumes:
       - postgres-data-local:/var/lib/postgresql/data
 
   api-spring:
     container_name: minha-api
-    build: ../../Downloads
+    build: .
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/aulafull
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=123456
+      - DB_URL=jdbc:postgresql://postgres-db:5432/fisiocare
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=${POSTGRES_PASSWORD:-fisiocare_local}
+      - JWT_SECRET=${JWT_SECRET:-jwt-local-apenas-para-testes}
+      - ADMIN_SECRET=${ADMIN_SECRET:-chave-local-apenas-para-testes}
     depends_on:
-      - postgres-db
+      postgres-db:
+        condition: service_healthy
 
 volumes:
   postgres-data-local:

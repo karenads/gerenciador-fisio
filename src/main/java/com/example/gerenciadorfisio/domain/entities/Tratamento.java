@@ -19,6 +19,11 @@ public class Tratamento {
     @Id
     @GeneratedValue
     private Long id;
+    // Empresa do registro: nunca é informada pelo frontend.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empresa_id")
+    private Empresa empresa;
+
     private String nome;
     private String descricao;
     private LocalDateTime dataInicio;

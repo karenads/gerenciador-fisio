@@ -27,22 +27,16 @@ public class SessaoService implements SessaoPorta {
 
     @Transactional(readOnly = true)
     public List<SessaoResponse> listarTodos() {
-        List<Sessao> sessoes = usuarioService.isAdmin()
-                ? sessaoRepository.findAll()
-                : sessaoRepository.findByResponsavel_Id(usuarioService.getUsuarioLogado().id());
+        // A empresa vem do JWT validado, nunca de parâmetros do cliente.
+        Long empresaId = usuarioService.getUsuarioLogado().empresaId();
+        List<Sessao> sessoes = sessaoRepository.findByEmpresa_Id(empresaId);
         return sessoes.stream().map(SessaoResponse::new).toList();
     }
 
     @Transactional(readOnly = true)
     public Sessao buscarPorId(Long id) {
-        Sessao s = sessaoRepository.findById(id).orElse(null);
-        if (s == null) return null;
-        if (usuarioService.isAdmin()) return s;
-        if (s.getResponsavel() != null
-                && s.getResponsavel().getId().equals(usuarioService.getUsuarioLogado().id())) {
-            return s;
-        }
-        return null;
+        return sessaoRepository.findByIdAndEmpresa_Id(id, usuarioService.getUsuarioLogado().empresaId())
+                .orElse(null);
     }
 
     @Transactional(readOnly = true)
@@ -73,6 +67,7 @@ public class SessaoService implements SessaoPorta {
         Sessao s = new Sessao();
         preencher(s, request);
         s.setResponsavel(usuarioService.getUsuarioEntidadeLogado());
+        s.setEmpresa(usuarioService.getUsuarioEntidadeLogado().getEmpresa());
         return new SessaoResponse(sessaoRepository.save(s));
     }
 

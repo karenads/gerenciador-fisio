@@ -9,33 +9,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout do código
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: 🔧 Instalar Docker Compose
+      - name: Construir e iniciar os serviços
+        run: docker compose up -d --build
+
+      - name: Verificar API e Swagger
         run: |
-          sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          sudo chmod +x /usr/local/bin/docker-compose
+          echo "Aguardando o backend inicializar..."
+          for i in $(seq 1 45); do
+            if curl --fail --silent http://localhost:8080/v3/api-docs > /dev/null; then
+              echo "Swagger disponível"
+              exit 0
+            fi
+            sleep 3
+          done
+          docker compose logs api-spring
+          exit 1
 
-      - name: 🐋 Subir ambiente com Docker Compose
-        run: docker-compose up -d
-
-      - name: ⏱️ Aguardar os contêineres estabilizarem
-        run: |
-          echo "Aguardando 30 segundos para os serviços iniciarem..."
-          sleep 30
-
-      - name: 🩺 Verificar status dos contêineres
-        run: |
-          echo "--- Status dos Contêineres ---"
-          docker-compose ps
-          echo "--- Logs do Banco de Dados ---"
-          docker-compose logs db || echo "Serviço 'db' não encontrado ou sem logs."
-          echo "--- Logs da API ---"
-          docker-compose logs api || echo "Serviço 'api' não encontrado ou sem logs."
-
-      - name: 📞 Realizar teste de saúde na API
-        run: curl --fail http://localhost:8080/swagger-ui/index.html
-
-      - name: 🛑 Parar os contêineres após o teste
+      - name: Exibir status e logs
         if: always()
-        run: docker-compose down
+        run: |
+          docker compose ps
+          docker compose logs --tail=100 postgres-db api-spring
+
+      - name: Parar os contêineres
+        if: always()
+        run: docker compose down -v

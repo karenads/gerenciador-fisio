@@ -22,29 +22,37 @@ public class UsuarioController {
     @FXML private TextField txtEmail;
     @FXML private PasswordField txtSenha;
     @FXML private PasswordField txtSecretKey;
+    @FXML private TextField txtRazaoSocial;
+    @FXML private TextField txtNomeFantasia;
+    @FXML private TextField txtCnpj;
 
     @FXML
     public void salvarUsuario(ActionEvent event) throws Exception {
         if (txtNome.getText().isBlank() || txtCpf.getText().isBlank()
                 || txtEmail.getText().isBlank() || txtSenha.getText().isBlank()
-                || txtSecretKey.getText().isBlank()) {
+                || txtSecretKey.getText().isBlank()
+                || txtRazaoSocial.getText().isBlank() || txtNomeFantasia.getText().isBlank()
+                || txtCnpj.getText().isBlank()) {
             showMessage(Alert.AlertType.ERROR, "Preencha todos os campos!");
             return;
         }
 
-        String jsonRequest = String.format("{\n"
-                        + "  \"nome\": \"%s\",\n"
-                        + "  \"email\": \"%s\",\n"
-                        + "  \"senha\": \"%s\",\n"
-                        + "  \"cpf\": \"%s\",\n"
-                        + "  \"secretKey\": \"%s\"\n"
-                        + "}", txtNome.getText(), txtEmail.getText(),
-                txtSenha.getText(), txtCpf.getText(), txtSecretKey.getText());
+        String jsonRequest = String.format("{\"nome\":\"%s\","
+                        + "\"email\":\"%s\","
+                        + "\"senha\":\"%s\","
+                        + "\"cpf\":\"%s\","
+                        + "\"secretKey\":\"%s\","
+                        + "\"razaoSocial\":\"%s\","
+                        + "\"nomeFantasia\":\"%s\","
+                        + "\"cnpj\":\"%s\"}",
+                txtNome.getText(), txtEmail.getText(), txtSenha.getText(),
+                txtCpf.getText(), txtSecretKey.getText(), txtRazaoSocial.getText(),
+                txtNomeFantasia.getText(), txtCnpj.getText());
 
         try {
             int resposta = executaMetodoAPI("http://localhost:8080/usuarios/admin", jsonRequest, "POST");
             if (resposta == 200) {
-                showMessage(Alert.AlertType.INFORMATION, "Administrador salvo com sucesso!");
+                showMessage(Alert.AlertType.INFORMATION, "Empresa e administrador salvos com sucesso!");
                 voltar(event);
             } else {
                 showMessage(Alert.AlertType.ERROR, "Erro ao salvar administrador! Código: " + resposta

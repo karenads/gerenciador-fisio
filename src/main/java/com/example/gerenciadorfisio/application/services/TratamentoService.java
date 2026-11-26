@@ -27,22 +27,16 @@ public class TratamentoService implements TratamentoPorta {
 
     @Transactional(readOnly = true)
     public List<TratamentoResponse> listarTodos() {
-        List<Tratamento> tratamentos = usuarioService.isAdmin()
-                ? tratamentoRepository.findAll()
-                : tratamentoRepository.findByResponsavel_Id(usuarioService.getUsuarioLogado().id());
+        // A empresa vem do JWT validado, nunca de parâmetros do cliente.
+        Long empresaId = usuarioService.getUsuarioLogado().empresaId();
+        List<Tratamento> tratamentos = tratamentoRepository.findByEmpresa_Id(empresaId);
         return tratamentos.stream().map(TratamentoResponse::new).toList();
     }
 
     @Transactional(readOnly = true)
     public Tratamento buscarPorId(Long id) {
-        Tratamento t = tratamentoRepository.findById(id).orElse(null);
-        if (t == null) return null;
-        if (usuarioService.isAdmin()) return t;
-        if (t.getResponsavel() != null
-                && t.getResponsavel().getId().equals(usuarioService.getUsuarioLogado().id())) {
-            return t;
-        }
-        return null;
+        return tratamentoRepository.findByIdAndEmpresa_Id(id, usuarioService.getUsuarioLogado().empresaId())
+                .orElse(null);
     }
 
     @Transactional(readOnly = true)
@@ -74,6 +68,7 @@ public class TratamentoService implements TratamentoPorta {
         Tratamento t = new Tratamento();
         preencher(t, request);
         t.setResponsavel(usuarioService.getUsuarioEntidadeLogado());
+        t.setEmpresa(usuarioService.getUsuarioEntidadeLogado().getEmpresa());
         return new TratamentoResponse(tratamentoRepository.save(t));
     }
 
